@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<workflow>
-  <name>Google Drive</name>
-  <version>0.1</version>
-  <bundle>com.drive.azai91</bundle>
-  <updated>1438659654</updated>
-  <file>google_drive.alfredworkflow</file>
-</workflow>
