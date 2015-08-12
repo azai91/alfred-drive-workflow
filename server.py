@@ -8,7 +8,7 @@ app = Flask(__name__)
 flow = OAuth2WebServerFlow(client_id='978117856621-tvpnqtr02b8u0bgnh75sqb1loq1f5527.apps.googleusercontent.com',
     client_secret='rty2NIATZfWFWSDX-XPs2usX',
     scope='https://www.googleapis.com/auth/drive',
-    redirect_uri='http://localhost:3000')
+    redirect_uri='http://localhost:1337')
 
 
 @app.route('/')
@@ -30,4 +30,4 @@ def write_pid():
 if __name__ == '__main__':
     stopServer()
     write_pid()
-    app.run(host='localhost', port=3000)
+    app.run(host='localhost', port=1337)
