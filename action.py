@@ -5,6 +5,8 @@ import signal
 import subprocess
 import os
 
+log = None
+
 def main(wf):
     url = wf.args[0]
     stopServer()
@@ -13,7 +15,7 @@ def main(wf):
         return 0
     elif url[:5] in 'login':
         startServer()
-        url = url[5:]
+        url = str(url[5:])
     webbrowser.open_new_tab(url)
 
 def startServer():

@@ -10,6 +10,8 @@ flow = OAuth2WebServerFlow(client_id='978117856621-tvpnqtr02b8u0bgnh75sqb1loq1f5
     scope='https://www.googleapis.com/auth/drive',
     redirect_uri='http://localhost:3000')
 
+log = None
+
 def main(wf):
     user_input = wf.args[0]
     command = user_input.split()[0]
