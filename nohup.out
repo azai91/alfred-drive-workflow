@@ -12,3 +12,27 @@
  * Running on http://localhost:3000/ (Press CTRL+C to quit)
  * Running on http://localhost:3000/ (Press CTRL+C to quit)
  * Running on http://localhost:3000/ (Press CTRL+C to quit)
+ * Running on http://localhost:1337/ (Press CTRL+C to quit)
+ * Running on http://localhost:1337/ (Press CTRL+C to quit)
+Traceback (most recent call last):
+  File "./server.py", line 31, in <module>
+    app.run(host='localhost', port=1337)
+  File "/Library/Python/2.7/site-packages/flask/app.py", line 772, in run
+    run_simple(host, port, self, **options)
+  File "/Library/Python/2.7/site-packages/werkzeug/serving.py", line 625, in run_simple
+    inner()
+  File "/Library/Python/2.7/site-packages/werkzeug/serving.py", line 603, in inner
+    passthrough_errors, ssl_context).serve_forever()
+  File "/Library/Python/2.7/site-packages/werkzeug/serving.py", line 512, in make_server
+    passthrough_errors, ssl_context)
+  File "/Library/Python/2.7/site-packages/werkzeug/serving.py", line 440, in __init__
+    HTTPServer.__init__(self, (host, int(port)), handler)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/SocketServer.py", line 420, in __init__
+    self.server_bind()
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/BaseHTTPServer.py", line 108, in server_bind
+    SocketServer.TCPServer.server_bind(self)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/SocketServer.py", line 434, in server_bind
+    self.socket.bind(self.server_address)
+  File "/System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 228, in meth
+    return getattr(self._sock,name)(*args)
+socket.error: [Errno 48] Address already in use

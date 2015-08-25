@@ -12,7 +12,7 @@ def main(wf):
     stopServer()
     if url in 'logout':
         wf.store_data('google_drive_oauth_code','')
-        return 0
+        return None
     elif url[:5] in 'login':
         startServer()
         url = str(url[5:])
@@ -26,9 +26,10 @@ def stopServer():
     pids = target.read().split('\n')
     for pid in pids:
         try:
-            os.kill(int(pid), signal.SIGKILL)
+            # os.kill(int(pid), signal.SIGTERM)
+            pass
         except:
-            a = 'hi'
+            pass
     target.truncate()
     target.close()
     open('./pid.py','w').close()

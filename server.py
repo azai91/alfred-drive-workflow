@@ -14,9 +14,7 @@ flow = OAuth2WebServerFlow(client_id='978117856621-tvpnqtr02b8u0bgnh75sqb1loq1f5
 @app.route('/')
 def default():
     code = request.args.get('code')
-    print code
     credentials = flow.step2_exchange(code)
-    print credentials
     wf = Workflow()
     wf.store_data('google_drive_oauth_code', credentials)
     return 'Thank you for your code'

@@ -8,7 +8,7 @@ import subprocess
 flow = OAuth2WebServerFlow(client_id='978117856621-tvpnqtr02b8u0bgnh75sqb1loq1f5527.apps.googleusercontent.com',
     client_secret='rty2NIATZfWFWSDX-XPs2usX',
     scope='https://www.googleapis.com/auth/drive',
-    redirect_uri='http://localhost:3000')
+    redirect_uri='http://localhost:1337')
 
 log = None
 
@@ -20,16 +20,18 @@ def main(wf):
     if command == '>':
         if options in 'login':
             wf.add_item(title='Drive > login',
-                arg=prepend_action_string('login', get_auth_url()),
+                arg=prepend_action_string('login',get_auth_url()),
                 icon=ICON_USER,
                 subtitle=get_auth_url(),
                 valid=True)
-        if options in 'logout':
+        if options in 'logout' and wf.stored_data('google_drive_oauth_code'):
             wf.add_item(title='Drive > logout',
                 arg='logout',
                 icon=ICON_USER,
                 subtitle=get_auth_url(),
                 valid=True)
+        wf.send_feedback()
+        return 0
     elif wf.stored_data('google_drive_oauth_code'):
         credentials = wf.stored_data('google_drive_oauth_code')
         http = httplib2.Http()
@@ -79,7 +81,7 @@ def add_credentials(code):
         return False
 
 def prepend_action_string(action, string):
-    return action +string
+    return action + string
 
 
 if __name__ == '__main__':
