@@ -67,7 +67,7 @@
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
-				<integer>0</integer>
+				<integer>16</integer>
 				<key>script</key>
 				<string>python action.py "{query}"</string>
 				<key>type</key>
