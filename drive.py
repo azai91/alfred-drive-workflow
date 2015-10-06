@@ -28,7 +28,6 @@ def main(wf):
             wf.add_item(title='Drive > logout',
                 arg='logout',
                 icon=ICON_USER,
-                subtitle=get_auth_url(),
                 valid=True)
         wf.send_feedback()
         return 0
