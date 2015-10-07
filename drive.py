@@ -13,7 +13,7 @@ def main(wf):
   options = user_input[len(command) + 1:]
 
   if command == '>':
-    if options in 'login':
+    if options in 'login' and not wf.stored_data('google_drive_oauth_code'):
       wf.add_item(title='Drive > login',
           arg=prepend_action_string('login',oauth.get_auth_url()),
           icon=ICON_USER,
