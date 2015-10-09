@@ -4,18 +4,18 @@ import sys
 import signal
 import subprocess
 import os
+from drive import Drive
 
 log = None
 
 def main(wf):
-    subprocess.call(['open','http://www.google.com'])
     url = wf.args[0]
-    stopServer()
+    # stopServer()
     if url in 'logout':
         wf.store_data('google_drive_oauth_code','')
         return None
     elif url[:5] in 'login':
-        startServer()
+        Drive.start_server()
         url = str(url[5:])
     subprocess.call(['open',url])
     # webbrowser.open_new_tab(url)

@@ -69,7 +69,7 @@
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
-				<integer>16</integer>
+				<integer>17</integer>
 				<key>script</key>
 				<string>python drive_launcher.py "{query}"</string>
 				<key>type</key>

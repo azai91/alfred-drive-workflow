@@ -9,7 +9,6 @@ from drive_api import Drive
 log = None
 wf = Workflow()
 
-
 def main(_):
   # if wf.first_run:
     # wf.clear_cache()
@@ -20,22 +19,22 @@ def main(_):
     user_input = wf.args[0]
 
   try:
-    wf.get_password('drive_access_token')
+    wf.logger.error(not Drive.get_credentials().access_token_expired)
+    if Drive.get_credentials().access_token_expired:
+      refresh()
   except PasswordNotFound:
     wf.logger.error('not password')
 
-  authorize()
+
 
   # links = get_links(user_input)
 
   try:
-    wf.get_password('drive_access_token')
     links = get_links(user_input)
     wf.logger.error('c')
-    if links:
-      wf.logger.error('made it')
-      add_items(links, user_input)
-      wf.logger.error('done')
+    wf.logger.error('made it')
+    add_items(links, user_input)
+    wf.logger.error('done')
 
   except:
     wf.add_item(title='Drive > login',
@@ -50,12 +49,29 @@ def main(_):
 def authorize():
   request_token = wf.cached_data('drive_request_token')
   if request_token:
+    wf.logger.error('drive reques token')
     try:
       user_credentials = Drive.verify_credentials(request_token)
+      wf.logger.error('new crednetials')
       Drive.save_credentials(user_credentials)
+      wf.logger.error('successfully')
       wf.clear_cache()
     except:
       wf.logger.error('RateLimitException')
+
+def refresh():
+  try:
+    wf.logger.error('refreshgin')
+    http = httplib2.Http()
+    wf.logger.error('r1')
+    user_credentials = Drive.get_credentials()
+    wf.logger.error('r2')
+    user_credentials.refresh(http)
+    wf.logger.error('rdone')
+    user_credentials = Drive.save_credentials()
+  except:
+    authorize()
+    wf.logger.error('error refreshsing')
 
 def prepend_action_string(action, string):
   return action + string
@@ -104,14 +120,14 @@ def add_items(links, user_input):
 
 def get_links(term):
   term = escape_term(term)
-  credentials = Drive.get_credentials()
+  user_credentials = Drive.get_credentials()
   wf.logger.error('1')
   http = httplib2.Http()
-  wf.logger.error(credentials)
-  http = credentials.authorize(http)
+  http = user_credentials.authorize(http)
   wf.logger.error(term)
-  wf.logger.error('https://www.googleapis.com/drive/v2/files?q=title+contains+\'' + term + '\'&key=AIzaSyAMhz8CJf7_xLUquUNdpvTF42fIDk7NALs')
-  (resp_headers, content) = http.request('https://www.googleapis.com/drive/v2/files?q=title+contains+\'%s\'&key=AIzaSyAMhz8CJf7_xLUquUNdpvTF42fIDk7NALs' % term,'GET')
+  url = 'https://www.googleapis.com/drive/v2/files?q=title+contains+\'%s\'&key=AIzaSyAMhz8CJf7_xLUquUNdpvTF42fIDk7NALs' % term
+  wf.logger.error(url)
+  (resp_headers, content) = http.request(url,'GET')
   wf.logger.error('get workded')
   # print json.loads(content)
   return json.loads(content)['items']
