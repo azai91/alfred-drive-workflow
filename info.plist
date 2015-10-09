@@ -4,6 +4,8 @@
 <dict>
 	<key>bundleid</key>
 	<string>com.drive.azai91</string>
+	<key>category</key>
+	<string>Productivity</string>
 	<key>connections</key>
 	<dict>
 		<key>3C794000-8A32-436F-82A1-5642A20CA50A</key>
@@ -69,7 +71,7 @@
 				<key>escaping</key>
 				<integer>16</integer>
 				<key>script</key>
-				<string>python action.py "{query}"</string>
+				<string>python drive_launcher.py "{query}"</string>
 				<key>type</key>
 				<integer>0</integer>
 			</dict>

@@ -9,12 +9,8 @@ def get_auth_url():
   return flow.step1_get_authorize_url()
 
 def add_credentials(code):
-  try:
-    credentials = flow.step2_exchange(code)
-    wf.store_data('google_drive_oauth_code', credentials)
-    return True
-  except:
-    return False
+  wf.cache_data('drive_request_token', code)
+  return True
 
 wf = Workflow()
 

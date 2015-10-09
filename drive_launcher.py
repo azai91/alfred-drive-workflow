@@ -8,6 +8,7 @@ import os
 log = None
 
 def main(wf):
+    subprocess.call(['open','http://www.google.com'])
     url = wf.args[0]
     stopServer()
     if url in 'logout':
@@ -16,7 +17,8 @@ def main(wf):
     elif url[:5] in 'login':
         startServer()
         url = str(url[5:])
-    webbrowser.open_new_tab(url)
+    subprocess.call(['open',url])
+    # webbrowser.open_new_tab(url)
 
 def startServer():
     subprocess.Popen(['nohup','python','./server.py'])
