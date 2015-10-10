@@ -12,15 +12,12 @@ wf = Workflow()
 def main(_):
   user_input = ""
   options = True if wf.args[0][0] == '>' else False
-  wf.logger.error(options)
 
   try:
     user_input = wf.args[0][1::].strip() if options else wf.args[0]
   except:
     user_input = wf.args[0]
 
-  wf.logger.error('tere')
-  wf.logger.error(user_input)
   if options:
     show_options(user_input)
   else:
@@ -35,10 +32,7 @@ def show_items(user_input):
   if len(user_input):
     try:
       links = get_links(user_input)
-      wf.logger.error('c')
-      wf.logger.error('made it')
       add_items(links, user_input)
-      wf.logger.error('done')
     except:
       wf.add_item(title='Drive > login',
         arg=Drive.get_auth_url(),
@@ -51,7 +45,6 @@ def show_options(user_input):
     wf.add_item(title='Drive > login',
       arg='login' + oauth.get_auth_url(),
       icon=ICON_USER,
-      subtitle='login' + oauth.get_auth_url(),
       valid=True)
   ## add another condition
   if user_input in 'logout':
@@ -61,30 +54,33 @@ def show_options(user_input):
       valid=True)
 
 def add_items(links, user_input):
-  # sorted(links, key=lambda link : link['lastViewedByMeDate'])
-  count = 0
-  wf.logger.error('started')
-  for index, link in enumerate(links):
-    type = ''
-    try:
-      type = link['mimeType'].split('.')[2]
-    except:
-      wf.logger.error('title' + link['mimeType'])
-    if type == 'spreadsheet' or type == 'document':
-      icon = './assets/sheets.png' if type == 'spreadsheet' else './assets/docs.png'
-      count += 1
-      wf.logger.error('before')
-      title = link['title']
-      wf.logger.error('title' + title)
-      alternateLink = link['alternateLink']
-      wf.logger.error('alternateLink' + alternateLink)
+  if len(links):
+    wf.logger.error('there are links')
+    # sorted(links, key=lambda link : link['lastViewedByMeDate'])
+    count = 0
+    for index, link in enumerate(links):
+      type = ''
+      try:
+        type = link['mimeType'].split('.')[2]
+      except:
+        wf.logger.error('title' + link['mimeType'])
+      if type == 'spreadsheet' or type == 'document':
+        icon = './assets/sheets.png' if type == 'spreadsheet' else './assets/docs.png'
+        count += 1
+        title = link['title']
+        alternateLink = link['alternateLink']
+        wf.add_item(
+          title=title,
+          arg=alternateLink,
+          icon=icon,
+          valid=True
+        )
+    if count == 0:
       wf.add_item(
-        title=title,
-        arg=alternateLink,
-        icon=icon,
-        valid=True
+        title='No files found',
+        icon=ICON_WARNING,
       )
-  if count == 0:
+  else:
     wf.add_item(
       title='No files found',
       icon=ICON_WARNING,
