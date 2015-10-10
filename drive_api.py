@@ -22,10 +22,6 @@ class AuthException(Exception):
 
 class Drive():
 
-  # @classmethod
-  # def cls.get_auth_url(cls):
-  #   return 'login' + cls.get_auth_url()
-
   @classmethod
   def verify_credentials(cls, code):
     return flow.step2_exchange(code)
@@ -41,20 +37,6 @@ class Drive():
   @classmethod
   def start_server(cls):
     subprocess.Popen(['nohup','python','./server.py'])
-
-  @classmethod
-  def stop_server(cls):
-    target = open('./pid.py','r+')
-    pids = target.read().split('\n')
-    for pid in pids:
-      try:
-        # os.kill(int(pid), signal.SIGTERM)
-        pass
-      except:
-        pass
-    target.truncate()
-    target.close()
-    open('./pid.py','w').close()
 
   @classmethod
   def get_request_token(cls):
