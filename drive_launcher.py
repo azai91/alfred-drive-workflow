@@ -12,15 +12,14 @@ def main(wf):
     url = wf.args[0]
     # stopServer()
     if url in 'logout':
-        wf.store_data('google_drive_oauth_code','')
+        Drive.delete_credentials()
         return None
     elif url[:5] in 'login':
-        Drive.start_server()
+        start_server()
         url = str(url[5:])
     subprocess.call(['open',url])
-    # webbrowser.open_new_tab(url)
 
-def startServer():
+def start_server():
     subprocess.Popen(['nohup','python','./server.py'])
 
 def stopServer():

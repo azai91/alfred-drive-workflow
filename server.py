@@ -8,12 +8,13 @@ import urlparse
 
 class HandlerClass(BaseHTTPServer.BaseHTTPRequestHandler):
   def do_GET(s):
-    try:
-      code = urlparse.urlparse(s.path)[4].split('=')[1]
-      Drive.store_request_token(code)
-      s.wfile.write('Thank you for your code')
-    except:
-      s.wfile.write('Error' + code)
+    # try:
+    code = urlparse.urlparse(s.path)[4].split('=')[1]
+    user_credentials = Drive.verify_credentials(code)
+    Drive.save_credentials(user_credentials)
+    s.wfile.write('Thank you for your code')
+    # except:
+      # s.wfile.write('Error' + code)
 
 ServerClass  = BaseHTTPServer.HTTPServer
 Protocol     = "HTTP/1.0"

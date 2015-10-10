@@ -14,86 +14,65 @@ def main(_):
     # wf.clear_cache()
 
   user_input = ""
+  options = True if wf.args[0][0] == '>' else False
+  wf.logger.error(options)
 
-  if len(wf.args):
+  try:
+    user_input = wf.args[0][1::].strip() if options else wf.args[0]
+  except:
     user_input = wf.args[0]
 
-  try:
-    wf.logger.error(not Drive.get_credentials().access_token_expired)
-    if Drive.get_credentials().access_token_expired:
-      refresh()
-  except PasswordNotFound:
-    wf.logger.error('not password')
+  wf.logger.error('tere')
+  wf.logger.error(user_input)
+  if options:
+    show_options(user_input)
+  else:
+    show_items(user_input)
 
+  wf.send_feedback()
+  return 0
 
+def show_items(user_input):
+  Drive.refresh()
 
-  # links = get_links(user_input)
+  if len(user_input):
+    try:
+      links = get_links(user_input)
+      wf.logger.error('c')
+      wf.logger.error('made it')
+      add_items(links, user_input)
+      wf.logger.error('done')
+    except:
+      wf.add_item(title='Drive > login',
+        arg=Drive.get_auth_url(),
+        icon=ICON_USER,
+        valid=True)
 
-  try:
-    links = get_links(user_input)
-    wf.logger.error('c')
-    wf.logger.error('made it')
-    add_items(links, user_input)
-    wf.logger.error('done')
-
-  except:
+def show_options(user_input):
+  wf.logger.error('optoins')
+  if user_input in 'login':
     wf.add_item(title='Drive > login',
-      arg=Drive.get_auth_url(),
+      arg='login' + oauth.get_auth_url(),
+      icon=ICON_USER,
+      subtitle='login' + oauth.get_auth_url(),
+      valid=True)
+  ## add another condition
+  if user_input in 'logout':
+    wf.add_item(title='Drive > logout',
+      arg='logout',
       icon=ICON_USER,
       valid=True)
 
-  wf.send_feedback()
-
-  return 0
-
-def authorize():
-  request_token = wf.cached_data('drive_request_token')
-  if request_token:
-    wf.logger.error('drive reques token')
-    try:
-      user_credentials = Drive.verify_credentials(request_token)
-      wf.logger.error('new crednetials')
-      Drive.save_credentials(user_credentials)
-      wf.logger.error('successfully')
-      wf.clear_cache()
-    except:
-      wf.logger.error('RateLimitException')
-
-def refresh():
-  try:
-    wf.logger.error('refreshgin')
-    http = httplib2.Http()
-    wf.logger.error('r1')
-    user_credentials = Drive.get_credentials()
-    wf.logger.error('r2')
-    user_credentials.refresh(http)
-    wf.logger.error('rdone')
-    user_credentials = Drive.save_credentials()
-  except:
-    authorize()
-    wf.logger.error('error refreshsing')
-
-def prepend_action_string(action, string):
-  return action + string
-
 def add_items(links, user_input):
-  # links = sorted()
+  # sorted(links, key=lambda link : link['lastViewedByMeDate'])
   count = 0
   wf.logger.error('started')
   for index, link in enumerate(links):
-    # wf.logger.error(link)
-    # required_keys = ['title','mimeType','alternateLink']
-    # if all(x in link for x in required_keys):
     type = ''
-    # print 'there'
     try:
       type = link['mimeType'].split('.')[2]
     except:
       wf.logger.error('title' + link['mimeType'])
-      pass
-    # print type
-    # wf.logger.error('title' + type)
-
     if type == 'spreadsheet' or type == 'document':
       icon = './assets/sheets.png' if type == 'spreadsheet' else './assets/docs.png'
       count += 1

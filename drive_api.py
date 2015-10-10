@@ -10,9 +10,8 @@ from oauth2client.file import Storage
 from keys import client_id, client_secret, scope, redirect_uri
 
 from workflow import Workflow, PasswordNotFound, ICON_TRASH, ICON_WARNING, ICON_USER
-flow = OAuth2WebServerFlow(client_id=client_id, client_secret=client_secret, scope=scope, redirect_uri=redirect_uri)
+flow = OAuth2WebServerFlow(client_id=client_id, client_secret=client_secret, scope=scope, redirect_uri=redirect_uri, authorization_header="approval_prompt='force'")
 
-flow.params['access_type'] = 'offline'
 storage = Storage('./credentials')
 wf = Workflow()
 
