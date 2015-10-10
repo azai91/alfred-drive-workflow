@@ -10,9 +10,6 @@ log = None
 wf = Workflow()
 
 def main(_):
-  # if wf.first_run:
-    # wf.clear_cache()
-
   user_input = ""
   options = True if wf.args[0][0] == '>' else False
   wf.logger.error(options)
@@ -81,22 +78,19 @@ def add_items(links, user_input):
       wf.logger.error('title' + title)
       alternateLink = link['alternateLink']
       wf.logger.error('alternateLink' + alternateLink)
-      # print 'before'
       wf.add_item(
         title=title,
         arg=alternateLink,
         icon=icon,
         valid=True
       )
-      # print 'after'
   if count == 0:
     wf.add_item(
       title='No files found',
       icon=ICON_WARNING,
     )
 
-#use wf.stored data
-
+#TODO: use wf.stored_data
 def get_links(term):
   term = escape_term(term)
   user_credentials = Drive.get_credentials()
@@ -108,7 +102,6 @@ def get_links(term):
   wf.logger.error(url)
   (resp_headers, content) = http.request(url,'GET')
   wf.logger.error('get workded')
-  # print json.loads(content)
   return json.loads(content)['items']
 
 def escape_term(term):

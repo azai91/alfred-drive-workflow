@@ -39,8 +39,6 @@ class Drive():
   def get_request_token(cls):
     cls.start_server()
     subprocess.call(['open', cls.get_auth_url()])
-    # wf.cache_data('request_token', request_token)
-    # auth_url = Drive.get_auth_url()
 
   @classmethod
   def save_credentials(cls, credentials):
@@ -58,15 +56,10 @@ class Drive():
   def refresh(cls):
     wf.logger.error('refreshgin')
     try:
-      wf.logger.error('refreshgin')
       http = httplib2.Http()
-      wf.logger.error('r1')
       user_credentials = Drive.get_credentials()
-      wf.logger.error('r2')
       user_credentials.refresh(http)
-      wf.logger.error('rdone')
       user_credentials = Drive.save_credentials()
     except:
-      # authorize()
       wf.logger.error('error refreshsing')
 
