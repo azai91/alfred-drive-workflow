@@ -38,15 +38,16 @@ class Drive:
 
   @classmethod
   def save_credentials(cls, credentials):
-    storage.put(credentials)
+    wf.store_data('credentials', credentials)
 
   @classmethod
   def get_credentials(cls):
-    return storage.get()
+    return wf.stored_data('credentials')
 
   @classmethod
   def delete_credentials(cls):
-    storage.delete()
+    wf.store_data('credentials','')
+    # storage.delete()
 
   @classmethod
   def refresh(cls):
