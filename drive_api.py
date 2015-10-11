@@ -28,10 +28,6 @@ class Drive:
     return flow.step2_exchange(code)
 
   @classmethod
-  def store_request_token(cls, code):
-    wf.cache_data('drive_request_token', code)
-
-  @classmethod
   def get_auth_url(cls):
     return 'login' + flow.step1_get_authorize_url()
 
@@ -55,11 +51,8 @@ class Drive:
   @classmethod
   def refresh(cls):
     try:
-      wf.logger.error(1)
       user_credentials = cls.get_credentials()
-      wf.logger.error(2)
       user_credentials.refresh(httplib2.Http())
-      wf.logger.error(3)
       user_credentials = cls.save_credentials(user_credentials)
     except:
       wf.logger.error('Error Refreshing')

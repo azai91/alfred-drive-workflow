@@ -8,6 +8,10 @@ class Search:
   def __init__(self,user_input):
     self.user_input = user_input
 
+  def show_items(self):
+    links = wf.cached_data(self.user_input, self.get_links)
+    self.add_items(links)
+
   #TODO: use wf.stored_data
   def get_links(self):
     user_input = escape_term(self.user_input)
@@ -17,10 +21,6 @@ class Search:
     url = 'https://www.googleapis.com/drive/v2/files?q=title+contains+\'%s\'&key=AIzaSyAMhz8CJf7_xLUquUNdpvTF42fIDk7NALs' % user_input
     (resp_headers, content) = http.request(url,'GET')
     return json.loads(content)['items']
-
-  def show_items(self):
-    links = wf.cached_data(self.user_input, self.get_links)
-    self.add_items(links)
 
   def add_items(self, links):
     if len(links):
