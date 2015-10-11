@@ -21,7 +21,7 @@ class DriveExeption(Exception):
 class AuthException(Exception):
   pass
 
-class Drive():
+class Drive:
 
   @classmethod
   def verify_credentials(cls, code):
@@ -54,12 +54,13 @@ class Drive():
 
   @classmethod
   def refresh(cls):
-    wf.logger.error('refreshgin')
     try:
-      http = httplib2.Http()
-      user_credentials = Drive.get_credentials()
-      user_credentials.refresh(http)
-      user_credentials = Drive.save_credentials()
+      wf.logger.error(1)
+      user_credentials = cls.get_credentials()
+      wf.logger.error(2)
+      user_credentials.refresh(httplib2.Http())
+      wf.logger.error(3)
+      user_credentials = cls.save_credentials(user_credentials)
     except:
-      wf.logger.error('error refreshsing')
+      wf.logger.error('Error Refreshing')
 
