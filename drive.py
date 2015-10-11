@@ -38,7 +38,6 @@ def main(_):
   return 0
 
 def show_options(user_input):
-  wf.logger.error('optoins')
   if user_input in 'login':
     wf.add_item(title='Drive > login',
       arg='login' + oauth.get_auth_url(),
