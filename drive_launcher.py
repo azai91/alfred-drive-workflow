@@ -22,19 +22,6 @@ def main(wf):
 def start_server():
     subprocess.Popen(['nohup','python','./server.py'])
 
-def stopServer():
-    target = open('./pid.py','r+')
-    pids = target.read().split('\n')
-    for pid in pids:
-        try:
-            # os.kill(int(pid), signal.SIGTERM)
-            pass
-        except:
-            pass
-    target.truncate()
-    target.close()
-    open('./pid.py','w').close()
-
 if __name__ == '__main__':
     wf = Workflow()
     log = wf.logger
