@@ -3,13 +3,14 @@ wf = Workflow()
 from drive_api import Drive
 import httplib2
 import json
+max_age = 86400 # cache set to one day
 
 class Search:
   def __init__(self,user_input):
     self.user_input = user_input
 
   def show_items(self):
-    links = wf.cached_data(self.user_input, self.get_links)
+    links = wf.cached_data(self.user_input,self.get_links,max_age=max_age)
     self.add_items(links)
 
   #TODO: use wf.stored_data
