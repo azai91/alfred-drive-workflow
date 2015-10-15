@@ -57,7 +57,7 @@ def filter_by_file_type(list, file_types):
       wf.logger.error('title' + link['mimeType'])
     if type in file_types:
       # refactor
-      icon = './assets/sheets.png' if type == 'spreadsheet' else './assets/docs.png'
+      icon = './icons/sheets.png' if type == 'spreadsheet' else './icons/docs.png'
       link['icon'] = icon
       link['type'] = type
       filter_list.append(link)
