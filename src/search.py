@@ -11,7 +11,6 @@ class Search:
     self.url = 'https://www.googleapis.com/drive/v2/files?orderBy=lastViewedByMeDate+desc&q=title+contains+\'%s\'&fields=items' % escape_input(user_input)
 
   def show_items(self):
-    wf.logger.error('showing items')
     # links = self.get_links()
     # add max age later
     links = wf.cached_data(self.user_input,self.get_links)

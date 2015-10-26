@@ -6,7 +6,6 @@ from workflow import Workflow
 
 def main(wf):
   url = wf.args[0]
-  wf.logger.error(url[5:])
   if url in 'logout':
     Drive.delete_credentials()
     return None
