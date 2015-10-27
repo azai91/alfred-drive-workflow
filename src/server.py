@@ -23,5 +23,5 @@ server_address = ('127.0.0.1', 1337)
 
 HandlerClass.protocol_version = Protocol
 httpd = ServerClass(server_address, HandlerClass)
-httpd.timeout = 10
+httpd.timeout = 20
 httpd.handle_request()
