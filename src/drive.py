@@ -35,24 +35,26 @@ def main(_):
       search.show_items()
       wf.logger.error('there are things')
     except:
-      wf.add_item(title='Drive > login',
-        arg=Drive.get_auth_url(),
-        icon=ICON_USER,
-        valid=True)
+      show_login()
       wf.send_feedback()
 
   return 0
 
+def show_login():
+  wf.add_item(title='d > login',
+    arg='login' + Drive.get_auth_url(),
+    icon=ICON_USER,
+    autocomplete='> login',
+    valid=True)
+
 def show_options(user_input):
   if user_input in 'login':
-    wf.add_item(title='Drive > login',
-      arg='login' + Drive.get_auth_url(),
-      icon=ICON_USER,
-      valid=True)
+    show_login()
   ## add another condition
   if user_input in 'logout':
-    wf.add_item(title='Drive > logout',
+    wf.add_item(title='d > logout',
       arg='logout',
+      autocomplete='> logout',
       icon=ICON_USER,
       valid=True)
 

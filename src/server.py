@@ -13,7 +13,7 @@ class HandlerClass(BaseHTTPServer.BaseHTTPRequestHandler):
     user_credentials = Drive.verify_credentials(code)
     Drive.save_credentials(user_credentials)
     s.wfile.write('Thank you for your code')
-    # except:
+    except:
       # s.wfile.write('Error' + code)
 
 ServerClass  = BaseHTTPServer.HTTPServer
