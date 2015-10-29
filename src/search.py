@@ -13,7 +13,7 @@ class Search:
   def show_items(self):
     # links = self.get_links()
     # add max age later
-    links = wf.cached_data(self.user_input,self.get_links)
+    links = wf.cached_data(self.user_input,self.get_links,max_age)
     if len(links):
       self.add_items(links)
     else:
