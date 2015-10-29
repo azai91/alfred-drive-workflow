@@ -12,7 +12,7 @@ class HandlerClass(BaseHTTPServer.BaseHTTPRequestHandler):
       code = urlparse.urlparse(s.path)[4].split('=')[1]
       user_credentials = Drive.verify_credentials(code)
       Drive.save_credentials(user_credentials)
-      s.wfile.write('Thank you for your code')
+      s.wfile.write('Your code has been saved in Alfred')
     except:
       s.wfile.write('Error' + code)
 
