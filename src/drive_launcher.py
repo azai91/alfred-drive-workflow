@@ -1,4 +1,3 @@
-import webbrowser
 import subprocess
 import sys
 from drive_api import Drive
