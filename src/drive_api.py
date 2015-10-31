@@ -3,15 +3,17 @@ import json
 import httplib2
 import subprocess
 from oauth2client.client import OAuth2WebServerFlow
-from keys import client_id, client_secret, scope, redirect_uri
+from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI
 import requests
 
 from workflow import Workflow
-flow = OAuth2WebServerFlow(client_id=client_id, client_secret=client_secret, scope=scope, redirect_uri=redirect_uri)
+flow = OAuth2WebServerFlow(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, scope=SCOPE, redirect_uri=REDIRECT_URI)
 flow.params['access_type'] = 'offline'
-auth_url = 'https://accounts.google.com/o/oauth2/auth?scope=%s&redirect_uri=%s&response_type=code&client_id=%s&access_type=offline&approval_prompt=force' % (scope,redirect_uri,client_id)
+auth_url = 'https://accounts.google.com/o/oauth2/auth?scope=%s&redirect_uri=%s&response_type=code&client_id=%s&access_type=offline&approval_prompt=force' % (SCOPE,REDIRECT_URI,CLIENT_ID)
 
-files_url='https://www.googleapis.com/drive/v2/files?orderBy=lastViewedByMeDate+desc'
+token_url = 'https://www.googleapis.com/oauth2/v3/token'
+revoke_url = 'https://accounts.google.com/o/oauth2/revoke?token='
+files_url='https://www.googleapis.com/drive/v2/files?orderBy=lastViewedByMeDate+desc&fields=items'
 
 wf = Workflow()
 
@@ -37,16 +39,15 @@ class Drive:
     # headers = {
     #   'Content-Type': 'application/x-www-form-urlencoded',
     # }
-    url = 'https://www.googleapis.com/oauth2/v3/token'
-    response = requests.post(url,{
+    response = requests.post(token_url,{
       'code': code,
-      'client_id' : client_id,
-      'client_secret' : client_secret,
-      'redirect_uri' : redirect_uri,
+      'client_id' : CLIENT_ID,
+      'client_secret' : CLIENT_SECRET,
+      'redirect_uri' : REDIRECT_URI,
       'grant_type' : 'authorization_code'
-    }).json();
+    }).json()
     wf.save_password('access_token', response['access_token'])
-    wf.save_password('access_token', response['refresh_token'])
+    wf.save_password('refresh_token', response['refresh_token'])
 
   @classmethod
   def get_request_token(cls):
@@ -64,28 +65,34 @@ class Drive:
   @classmethod
   def delete_credentials(cls):
     wf.store_data('credentials','')
-    # storage.delete()
 
   @classmethod
   def refresh(cls):
+    refresh_token = wf.get_password('refresh_token')
     try:
-      user_credentials = cls.get_credentials()
-      user_credentials.refresh(httplib2.Http())
-      user_credentials = cls.save_credentials(user_credentials)
+      response = requests.post(token_url,{
+        'client_id' : CLIENT_ID,
+        'client_secret' : CLIENT_SECRET,
+        'refresh_token' : refresh_token,
+        'grant_type' : 'refresh_token'
+      }).json()
+      wf.save_password('access_token', response['access_token'])
     except:
       wf.logger.error('Error Refreshing')
 
   @classmethod
   def get_links(cls):
-    wf.logger.error('CALLED')
-    user_credentials = cls.get_credentials()
-    http = httplib2.Http()
-    wf.logger.error('getting crednetails')
-    http = user_credentials.authorize(http)
-    (resp_headers, content) = http.request(files_url,'GET')
-    wf.logger.error('getting crednetails')
-    unfiltered_list = json.loads(content)['items']
+    access_token = wf.get_password('access_token')
+    headers = {
+      'Authorization' : 'Bearer %s' % access_token
+    }
+    response = requests.get(files_url,headers=headers).json()
+    unfiltered_list = response['items']
     return filter_by_file_type(unfiltered_list,['spreadsheet','document'])
+
+  @classmethod
+  def revoke_token(cls):
+    pass
 
 def filter_by_file_type(list, file_types):
   filter_list = []
