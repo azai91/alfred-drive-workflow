@@ -15,8 +15,7 @@ def main(_):
     wf.add_item(
       'An update is available!',
       autocomplete='workflow:update',
-      valid=False
-    )
+      valid=False)
 
   try:
     user_input = wf.args[0][1::].strip() if options else wf.args[0]
@@ -25,15 +24,13 @@ def main(_):
 
   if options:
     show_options(user_input)
-    wf.send_feedback()
   elif len(user_input):
-    # Drive.refresh()
     try:
       show_items(user_input)
     except:
       show_login()
-      wf.send_feedback()
 
+  wf.send_feedback()
   return 0
 
 def show_items(user_input):
@@ -50,10 +47,8 @@ def show_items(user_input):
       title='No files found',
       icon=ICON_WARNING,
     )
-  wf.send_feedback()
 
 def add_items(links):
-  wf.logger.error('there are links')
   # sorted(links, key=lambda link : link['lastViewedByMeDate'])
   for index, link in enumerate(links):
     title = link['title']
