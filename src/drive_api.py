@@ -73,6 +73,10 @@ class Drive:
       return filter_by_file_type(unfiltered_list,['spreadsheet','document'])
 
   @classmethod
+  def open_page(cls,url):
+    subprocess.call(['open',url])
+
+  @classmethod
   def revoke_token(cls):
     access_token = wf.get_password('access_token')
     return requests.get('https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token)

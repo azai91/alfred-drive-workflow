@@ -9,8 +9,7 @@ def main(wf):
     return Drive.delete_credentials()
   elif url[:5] in 'login':
     return Drive.open_auth_page()
-
-  subprocess.call(['open',url])
+  Drive.open_page(url)
 
 if __name__ == '__main__':
     wf = Workflow()
