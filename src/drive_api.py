@@ -76,8 +76,10 @@ class Drive:
         'grant_type' : 'refresh_token'
       }).json()
       wf.save_password('access_token', response['access_token'])
+      return 1
     except:
       wf.logger.error('Error Refreshing')
+      return 0
 
   @classmethod
   def get_links(cls):
@@ -86,9 +88,12 @@ class Drive:
       'Authorization' : 'Bearer %s' % access_token
     }
     response = requests.get(files_url,headers=headers).json()
-    return response
-    # unfiltered_list = response['items']
-    # return filter_by_file_type(unfiltered_list,['spreadsheet','document'])
+    if 'error' in response and cls.refresh():
+      return cls.get_links()
+
+    else:
+      unfiltered_list = response['items']
+      return filter_by_file_type(unfiltered_list,['spreadsheet','document'])
 
   @classmethod
   def revoke_token(cls):
