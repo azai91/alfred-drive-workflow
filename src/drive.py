@@ -1,4 +1,4 @@
-from workflow import Workflow, PasswordNotFound, ICON_TRASH, ICON_WARNING, ICON_USER
+from workflow import Workflow
 from drive_api import Drive
 
 UPDATE_SETTINGS = {'github_slug' : 'azai91/alfred-drive-workflow'}
@@ -23,61 +23,15 @@ def main(_):
     user_input = wf.args[0]
 
   if options:
-    show_options(user_input)
+    Drive.show_options(user_input)
   elif len(user_input):
     try:
-      show_items(user_input)
+      Drive.show_items(user_input)
     except:
-      show_login()
+      Drive.show_login()
 
-  wf.send_feedback()
   return 0
 
-def show_items(user_input):
-  links = wf.cached_data('api_results', Drive.get_links)
-  try:
-    links = wf.filter(query=user_input,items=links,key=lambda x : x['title'])
-  except:
-    links = []
-
-  if len(links):
-    add_items(links)
-  else:
-    wf.add_item(
-      title='No files found',
-      icon=ICON_WARNING,
-    )
-
-def add_items(links):
-  # sorted(links, key=lambda link : link['lastViewedByMeDate'])
-  for index, link in enumerate(links):
-    title = link['title']
-    alternateLink = link['alternateLink']
-    icon = link['icon']
-    wf.add_item(
-      title=title,
-      arg=alternateLink,
-      icon=icon,
-      valid=True
-    )
-
-def show_login():
-  wf.add_item(title='d > login',
-    arg='login',
-    icon=ICON_USER,
-    autocomplete='> login',
-    valid=True)
-
-def show_options(user_input):
-  if user_input in 'login':
-    show_login()
-  ## add another condition
-  if user_input in 'logout':
-    wf.add_item(title='d > logout',
-      arg='logout',
-      autocomplete='> logout',
-      icon=ICON_USER,
-      valid=True)
 
 if __name__ == '__main__':
   wf.run(main)

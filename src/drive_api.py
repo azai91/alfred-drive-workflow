@@ -1,13 +1,9 @@
 import json
 import subprocess
-from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI
+from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI, FILES_URL, AUTH_URL, TOKEN_URL, TOKEN_URL, CACHE_MAX_AGE
 import requests
-from workflow import Workflow
+from workflow import Workflow, ICON_USER
 
-auth_url = 'https://accounts.google.com/o/oauth2/auth?scope=%s&redirect_uri=%s&response_type=code&client_id=%s&access_type=offline&approval_prompt=force' % (SCOPE, REDIRECT_URI, CLIENT_ID)
-
-token_url = 'https://www.googleapis.com/oauth2/v3/token'
-files_url= 'https://www.googleapis.com/drive/v2/files?orderBy=lastViewedByMeDate+desc&fields=items'
 wf = Workflow()
 
 class Drive:
@@ -15,7 +11,7 @@ class Drive:
   @classmethod
   def open_auth_page(cls):
     cls.start_auth_server()
-    subprocess.call(['open', auth_url])
+    subprocess.call(['open', AUTH_URL])
 
   @classmethod
   def start_auth_server(cls):
@@ -23,7 +19,7 @@ class Drive:
 
   @classmethod
   def exchange_tokens(cls, code):
-    response = requests.post(token_url,{
+    response = requests.post(TOKEN_URL,{
       'code': code,
       'client_id' : CLIENT_ID,
       'client_secret' : CLIENT_SECRET,
@@ -46,7 +42,7 @@ class Drive:
   def refresh(cls):
     refresh_token = wf.get_password('refresh_token')
     try:
-      response = requests.post(token_url,{
+      response = requests.post(TOKEN_URL,{
         'client_id' : CLIENT_ID,
         'client_secret' : CLIENT_SECRET,
         'refresh_token' : refresh_token,
@@ -64,7 +60,7 @@ class Drive:
     headers = {
       'Authorization' : 'Bearer %s' % access_token
     }
-    response = requests.get(files_url,headers=headers).json()
+    response = requests.get(FILES_URL,headers=headers).json()
     if 'error' in response and cls.refresh():
       return cls.get_links()
 
@@ -80,6 +76,60 @@ class Drive:
   def revoke_token(cls):
     access_token = wf.get_password('access_token')
     return requests.get('https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token)
+
+  @classmethod
+  def show_items(cls, user_input):
+    links = wf.cached_data('api_results', cls.get_links,CACHE_MAX_AGE)
+    try:
+      links = wf.filter(query=user_input, items=links, key=lambda x : x['title'])
+    except:
+      links = []
+
+    if len(links):
+      add_items(links)
+    else:
+      wf.add_item(
+        title='No files found',
+        icon=ICON_WARNING)
+
+    wf.send_feedback()
+
+  @classmethod
+  def show_options(cls,user_input):
+    if user_input in 'login':
+      cls.show_login()
+    ## add another condition
+    if user_input in 'logout':
+      cls.show_logout()
+    wf.send_feedback()
+
+  @classmethod
+  def show_login(cls):
+    wf.add_item(title='d > login',
+      arg='login',
+      icon=ICON_USER,
+      autocomplete='> login',
+      valid=True)
+
+  @classmethod
+  def show_logout(cls):
+    wf.add_item(title='d > logout',
+      arg='logout',
+      autocomplete='> logout',
+      icon=ICON_USER,
+      valid=True)
+
+def add_items(links):
+  # sorted(links, key=lambda link : link['lastViewedByMeDate'])
+  for index, link in enumerate(links):
+    title = link['title']
+    alternateLink = link['alternateLink']
+    icon = link['icon']
+    wf.add_item(
+      title=title,
+      arg=alternateLink,
+      icon=icon,
+      valid=True)
 
 def filter_by_file_type(list, file_types):
   filter_list = []
