@@ -1,6 +1,5 @@
 import json
 from workflow import Workflow, PasswordNotFound, ICON_TRASH, ICON_WARNING, ICON_USER
-import httplib2
 from drive_api import Drive
 
 UPDATE_SETTINGS = {'github_slug' : 'azai91/alfred-drive-workflow'}

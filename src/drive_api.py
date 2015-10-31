@@ -2,13 +2,10 @@ import workflow.web as requests
 import json
 import httplib2
 import subprocess
-from oauth2client.client import OAuth2WebServerFlow
 from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI
 import requests
-
 from workflow import Workflow
-flow = OAuth2WebServerFlow(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, scope=SCOPE, redirect_uri=REDIRECT_URI)
-flow.params['access_type'] = 'offline'
+
 auth_url = 'https://accounts.google.com/o/oauth2/auth?scope=%s&redirect_uri=%s&response_type=code&client_id=%s&access_type=offline&approval_prompt=force' % (SCOPE,REDIRECT_URI,CLIENT_ID)
 
 token_url = 'https://www.googleapis.com/oauth2/v3/token'

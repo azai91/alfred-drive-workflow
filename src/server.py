@@ -1,8 +1,5 @@
-import os
-import sys
 import BaseHTTPServer
 from SimpleHTTPServer import SimpleHTTPRequestHandler
-from oauth2client.client import OAuth2WebServerFlow
 from drive_api import Drive
 import urlparse
 
