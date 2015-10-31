@@ -4,7 +4,7 @@ from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI
 import requests
 from workflow import Workflow
 
-auth_url = 'https://accounts.google.com/o/oauth2/auth?scope=%s&redirect_uri=%s&response_type=code&client_id=%s&access_type=offline&approval_prompt=force' % (SCOPE,REDIRECT_URI, CLIENT_ID)
+auth_url = 'https://accounts.google.com/o/oauth2/auth?scope=%s&redirect_uri=%s&response_type=code&client_id=%s&access_type=offline&approval_prompt=force' % (SCOPE, REDIRECT_URI, CLIENT_ID)
 
 token_url = 'https://www.googleapis.com/oauth2/v3/token'
 files_url= 'https://www.googleapis.com/drive/v2/files?orderBy=lastViewedByMeDate+desc&fields=items'
@@ -95,6 +95,5 @@ def filter_by_file_type(list, file_types):
       link['icon'] = icon
       link['type'] = type
       filter_list.append(link)
-
   return filter_list
 
