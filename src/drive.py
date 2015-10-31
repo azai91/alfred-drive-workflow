@@ -3,7 +3,6 @@ from drive_api import Drive
 
 UPDATE_SETTINGS = {'github_slug' : 'azai91/alfred-drive-workflow'}
 HELP_URL = 'https://github.com/azai91/alfred-drive-workflow/issues'
-CACHE_MAX_AGE = 60*5 # cache set to 5 minutes
 
 wf = Workflow(update_settings=UPDATE_SETTINGS, help_url=HELP_URL)
 
@@ -31,7 +30,6 @@ def main(_):
       Drive.show_login()
 
   return 0
-
 
 if __name__ == '__main__':
   wf.run(main)
