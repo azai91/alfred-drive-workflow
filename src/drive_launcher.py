@@ -6,11 +6,9 @@ from workflow import Workflow
 def main(wf):
   url = wf.args[0]
   if url in 'logout':
-    Drive.delete_credentials()
-    return None
+    return Drive.delete_credentials()
   elif url[:5] in 'login':
-    Drive.open_auth_page()
-    return None
+    return Drive.open_auth_page()
 
   subprocess.call(['open',url])
 
