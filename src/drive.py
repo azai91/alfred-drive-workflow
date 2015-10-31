@@ -1,4 +1,3 @@
-import json
 from workflow import Workflow, PasswordNotFound, ICON_TRASH, ICON_WARNING, ICON_USER
 from drive_api import Drive
 

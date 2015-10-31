@@ -4,18 +4,11 @@ from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI
 import requests
 from workflow import Workflow
 
-auth_url = 'https://accounts.google.com/o/oauth2/auth?scope=%s&redirect_uri=%s&response_type=code&client_id=%s&access_type=offline&approval_prompt=force' % (SCOPE,REDIRECT_URI,CLIENT_ID)
+auth_url = 'https://accounts.google.com/o/oauth2/auth?scope=%s&redirect_uri=%s&response_type=code&client_id=%s&access_type=offline&approval_prompt=force' % (SCOPE,REDIRECT_URI, CLIENT_ID)
 
 token_url = 'https://www.googleapis.com/oauth2/v3/token'
-files_url='https://www.googleapis.com/drive/v2/files?orderBy=lastViewedByMeDate+desc&fields=items'
-
+files_url= 'https://www.googleapis.com/drive/v2/files?orderBy=lastViewedByMeDate+desc&fields=items'
 wf = Workflow()
-
-class DriveExeption(Exception):
-  pass
-
-class AuthException(Exception):
-  pass
 
 class Drive:
 
@@ -30,9 +23,6 @@ class Drive:
 
   @classmethod
   def exchange_tokens(cls, code):
-    # headers = {
-    #   'Content-Type': 'application/x-www-form-urlencoded',
-    # }
     response = requests.post(token_url,{
       'code': code,
       'client_id' : CLIENT_ID,
@@ -49,16 +39,8 @@ class Drive:
     subprocess.call(['open', cls.get_auth_url()])
 
   @classmethod
-  def save_credentials(cls, credentials):
-    wf.store_data('credentials', credentials)
-
-  @classmethod
-  def get_credentials(cls):
-    return wf.stored_data('credentials')
-
-  @classmethod
   def delete_credentials(cls):
-    wf.store_data('credentials','')
+    wf.delete_password('access_token','')
 
   @classmethod
   def refresh(cls):
