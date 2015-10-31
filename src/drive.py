@@ -39,7 +39,7 @@ def main(_):
   return 0
 
 def show_items(user_input):
-  links = wf.cached_data('api_results', Drive.get_links, CACHE_MAX_AGE)
+  links = wf.cached_data('api_results', Drive.get_links)
   try:
     links = wf.filter(query=user_input,items=links,key=lambda x : x['title'])
   except:

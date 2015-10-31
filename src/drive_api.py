@@ -12,7 +12,6 @@ flow.params['access_type'] = 'offline'
 auth_url = 'https://accounts.google.com/o/oauth2/auth?scope=%s&redirect_uri=%s&response_type=code&client_id=%s&access_type=offline&approval_prompt=force' % (SCOPE,REDIRECT_URI,CLIENT_ID)
 
 token_url = 'https://www.googleapis.com/oauth2/v3/token'
-revoke_url = 'https://accounts.google.com/o/oauth2/revoke?token='
 files_url='https://www.googleapis.com/drive/v2/files?orderBy=lastViewedByMeDate+desc&fields=items'
 
 wf = Workflow()
@@ -87,12 +86,14 @@ class Drive:
       'Authorization' : 'Bearer %s' % access_token
     }
     response = requests.get(files_url,headers=headers).json()
-    unfiltered_list = response['items']
-    return filter_by_file_type(unfiltered_list,['spreadsheet','document'])
+    return response
+    # unfiltered_list = response['items']
+    # return filter_by_file_type(unfiltered_list,['spreadsheet','document'])
 
   @classmethod
   def revoke_token(cls):
-    pass
+    access_token = wf.get_password('access_token')
+    return requests.get('https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token)
 
 def filter_by_file_type(list, file_types):
   filter_list = []
