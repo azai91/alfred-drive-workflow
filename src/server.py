@@ -10,11 +10,10 @@ class HandlerClass(BaseHTTPServer.BaseHTTPRequestHandler):
   def do_GET(s):
     try:
       code = urlparse.urlparse(s.path)[4].split('=')[1]
-      user_credentials = Drive.verify_credentials(code)
-      Drive.save_credentials(user_credentials)
+      user_credentials = Drive.exchange_tokens(code)
       s.wfile.write('Your code has been saved in Alfred')
     except:
-      s.wfile.write('Error' + code)
+      s.wfile.write('Error with setting code')
 
 ServerClass  = BaseHTTPServer.HTTPServer
 Protocol     = "HTTP/1.0"

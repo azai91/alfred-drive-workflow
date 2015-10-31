@@ -1,8 +1,10 @@
 import workflow.web as requests
 import json
 import httplib2
+import subprocess
 from oauth2client.client import OAuth2WebServerFlow
 from keys import client_id, client_secret, scope, redirect_uri
+import requests
 
 from workflow import Workflow
 flow = OAuth2WebServerFlow(client_id=client_id, client_secret=client_secret, scope=scope, redirect_uri=redirect_uri)
@@ -22,24 +24,29 @@ class AuthException(Exception):
 class Drive:
 
   @classmethod
-  def get_auth_url(cls):
-    return auth_url
+  def open_auth_page(cls):
+    cls.start_auth_server()
+    subprocess.call(['open', auth_url])
 
   @classmethod
-  def verify_credentials(cls, consumer_key):
+  def start_auth_server(cls):
+    subprocess.Popen(['nohup','python','./server.py'])
+
+  @classmethod
+  def exchange_tokens(cls, code):
     # headers = {
     #   'Content-Type': 'application/x-www-form-urlencoded',
     # }
-    # url = 'https://www.googleapis.com/oauth2/v3/token'
-    # params = {
-    #   'code': consumer_key,
-    #   'client_id' : client_id,
-    #   'client_secret' : client_secret,
-    #   'redirect_uri' : redirect_uri,
-    #   'grant_type' : 'authorization_code'
-    # }
-    # return requests.post(url,params=params)
-    return flow.step2_exchange(consumer_key)
+    url = 'https://www.googleapis.com/oauth2/v3/token'
+    response = requests.post(url,{
+      'code': code,
+      'client_id' : client_id,
+      'client_secret' : client_secret,
+      'redirect_uri' : redirect_uri,
+      'grant_type' : 'authorization_code'
+    }).json();
+    wf.save_password('access_token', response['access_token'])
+    wf.save_password('access_token', response['refresh_token'])
 
   @classmethod
   def get_request_token(cls):

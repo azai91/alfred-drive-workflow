@@ -70,7 +70,7 @@ def add_items(links):
 
 def show_login():
   wf.add_item(title='d > login',
-    arg='login' + Drive.get_auth_url(),
+    arg='login',
     icon=ICON_USER,
     autocomplete='> login',
     valid=True)
