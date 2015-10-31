@@ -1,6 +1,4 @@
-import workflow.web as requests
 import json
-import httplib2
 import subprocess
 from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI
 import requests
