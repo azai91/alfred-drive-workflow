@@ -1,7 +1,5 @@
-import subprocess
 import sys
 from drive_api import Drive
-from workflow import Workflow
 
 def main(wf):
   url = wf.args[0]
@@ -12,5 +10,4 @@ def main(wf):
   Drive.open_page(url)
 
 if __name__ == '__main__':
-    wf = Workflow()
-    sys.exit(wf.run(main))
+  sys.exit(wf.run(main))
