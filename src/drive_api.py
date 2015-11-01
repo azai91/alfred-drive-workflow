@@ -3,8 +3,10 @@ import subprocess
 from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI, FILES_URL, AUTH_URL, TOKEN_URL, TOKEN_URL, CACHE_MAX_AGE
 import requests
 from workflow import Workflow, ICON_USER
+UPDATE_SETTINGS = {'github_slug' : 'azai91/alfred-drive-workflow'}
+HELP_URL = 'https://github.com/azai91/alfred-drive-workflow/issues'
 
-wf = Workflow()
+wf = Workflow(update_settings=UPDATE_SETTINGS, help_url=HELP_URL)
 
 class Drive:
 
@@ -118,6 +120,13 @@ class Drive:
       autocomplete='> logout',
       icon=ICON_USER,
       valid=True)
+
+  @classmethod
+  def add_update(cls):
+    wf.add_item(
+      'New version available!',
+      'Action this item to install the update',
+      autocomplete='workflow:update')
 
 def add_items(links):
   # sorted(links, key=lambda link : link['lastViewedByMeDate'])
