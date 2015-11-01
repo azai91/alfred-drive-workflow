@@ -11,10 +11,11 @@ def main(_):
   options = True if wf.args[0][0] == '>' else False
 
   if wf.update_available:
+    # wf.start_update()
     wf.add_item(
       'An update is available!',
-      autocomplete='workflow:update',
-      valid=False)
+      autocomplete='workflow:update')
+    return wf.send_feedback()
 
   try:
     user_input = wf.args[0][1::].strip() if options else wf.args[0]
