@@ -1,5 +1,11 @@
 import sys
 from drive_api import Drive
+from workflow import Workflow
+
+UPDATE_SETTINGS = {'github_slug' : 'azai91/alfred-drive-workflow'}
+HELP_URL = 'https://github.com/azai91/alfred-drive-workflow/issues'
+
+wf = Workflow(update_settings=UPDATE_SETTINGS, help_url=HELP_URL)
 
 def main(wf):
   url = wf.args[0]
