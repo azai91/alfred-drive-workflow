@@ -24,7 +24,7 @@ def main(_):
     try:
       Drive.show_items(user_input)
     except:
-      Drive.show_login()
+      Drive.show_options('login')
 
   return 0
 

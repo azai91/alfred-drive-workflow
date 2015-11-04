@@ -65,7 +65,6 @@ class Drive:
     response = requests.get(FILES_URL,headers=headers).json()
     if 'error' in response and cls.refresh():
       return cls.get_links()
-
     else:
       unfiltered_list = response['items']
       return filter_by_file_type(unfiltered_list,['spreadsheet','document'])
@@ -76,12 +75,14 @@ class Drive:
 
   @classmethod
   def revoke_token(cls):
-    access_token = wf.get_password('access_token')
+    access_token = wf.save_password('access_token','')
     return requests.get('https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token)
 
   @classmethod
   def show_items(cls, user_input):
-    links = wf.cached_data('api_results', cls.get_links,CACHE_MAX_AGE)
+    if not wf.get_password('access_token'):
+      raise Exception('No access token found')
+    links = wf.cached_data('api_results', cls.get_links, CACHE_MAX_AGE)
     try:
       links = wf.filter(query=user_input, items=links, key=lambda x : x['title'])
     except:
@@ -147,7 +148,7 @@ def filter_by_file_type(list, file_types):
     try:
       type = link['mimeType'].split('.')[2]
     except:
-      wf.logger.error('title' + link['mimeType'])
+      pass
     if type in file_types:
       # refactor
       icon = './icons/sheets.png' if type == 'spreadsheet' else './icons/docs.png'
