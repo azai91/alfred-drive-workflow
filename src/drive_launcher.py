@@ -21,7 +21,6 @@ def main(wf):
     Drive.set_cache_length(length)
     return sys.stdout.write("cache set to " + str(length))
 
-
   Drive.open_page(url)
 
 if __name__ == '__main__':
