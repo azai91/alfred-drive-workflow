@@ -5,7 +5,6 @@ With ```enter``` you can open the entry in your default browser.
 
 [Download](https://github.com/azai91/alfred-drive-workflow/releases)
 
-![inline](./assets/config.png)
 ![inline](./assets/search.png)
 
 ##Getting started
@@ -14,10 +13,20 @@ You have to login (```d > login```) before you can use the workflow. The login u
 
 ##Commands
 - ```d {query}```
-- ```d > login```
-- ```d > logout```
-- ```d > clear cache```
-- ```d > set cache [seconds]```
+Searches your Google Drive for files that match that query. You can open the file in your default browser by selecting the file and hitting ```enter```
 
+- ```d > login```
+Links the workflow with your Google Drive Account. This option will redirect you to a Google Authentication page.
+
+- ```d > logout```
+Removes the current Google Drive Account from the workflow.
+
+- ```d > clear cache```
+Responses from Google Drive API are cached to increase the speed. Use this option if you want to clear the cache and make a fresh request.
+
+- ```d > set cache [seconds]```
+Sets the length of the duration for how long responses are held in cache before a fresh request is made. Default is 3600 seconds (1 hour)
+
+![inline](./assets/config.png)
 
 ###Please leave issues if you encounter any problems or star this repo if you found it useful :)
