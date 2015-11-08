@@ -9,14 +9,14 @@ wf = Workflow(update_settings=UPDATE_SETTINGS, help_url=HELP_URL)
 
 def main(wf):
   url = wf.args[0]
-  if url[:6] in 'logout':
+  if url == 'logout':
     return Drive.delete_credentials()
-  elif url[:5] in 'login':
+  elif url == 'login':
     return Drive.open_auth_page()
-  elif url[:5] in 'clear':
+  elif url == 'clear':
     Drive.clear_cache()
     return sys.stdout.write("cache cleared")
-  elif url[:3] in 'set':
+  elif url.startswith('set'):
     length = int(url[3:])
     Drive.set_cache_length(length)
     return sys.stdout.write("cache set to " + str(length))
