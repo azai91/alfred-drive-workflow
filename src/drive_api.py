@@ -145,10 +145,15 @@ class Drive:
         autocomplete='> set cache length ',
         icon=ICON_USER)
     else:
-      wf.add_item(title='d > set cache length %s seconds' % length,
-        arg='set' + length,
-        icon=ICON_USER,
-        valid=True)
+      try:
+        int(length)
+        wf.add_item(title='d > set cache length %s seconds' % length,
+          arg='set' + length,
+          icon=ICON_USER,
+          valid=True)
+      except:
+        wf.add_item(title='please insert valid cache length',
+          icon=ICON_USER)
 
   @classmethod
   def add_update(cls):
