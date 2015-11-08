@@ -11,8 +11,10 @@ You have to login (```d > login```) before you can use the workflow. The login u
 ![inline](./assets/search.png)
 
 ##Commands
+- ```d {query}```
 - ```d > login```
 - ```d > logout```
-- ```d {query}```
+- ```d > clear cache```
+
 
 ###Please leave issues if you encounter any problems or star this repo if you found it useful :)

@@ -98,12 +98,14 @@ class Drive:
     wf.send_feedback()
 
   @classmethod
-  def show_options(cls,user_input):
+  def show_options(cls, user_input):
     if user_input in 'login':
       cls.show_login()
     ## add another condition
     if user_input in 'logout':
       cls.show_logout()
+    if user_input in 'clear_cache':
+      cls.show_clear_cache()
     wf.send_feedback()
 
   @classmethod
@@ -123,11 +125,23 @@ class Drive:
       valid=True)
 
   @classmethod
+  def show_clear_cache(cls):
+    wf.add_item(title='d > clear cache',
+      arg='clear',
+      autocomplete='> clear cache',
+      icon=ICON_USER,
+      valid=True)
+
+  @classmethod
   def add_update(cls):
     wf.add_item(
       'New version available!',
       'Action this item to install the update',
       autocomplete='workflow:update')
+
+  @classmethod
+  def clear_cache(cls):
+    wf.clear_cache()
 
 def add_items(links):
   # sorted(links, key=lambda link : link['lastViewedByMeDate'])

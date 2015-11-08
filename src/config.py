@@ -7,4 +7,4 @@ AUTH_URL = 'https://accounts.google.com/o/oauth2/auth?scope=%s&redirect_uri=%s&r
 TOKEN_URL = 'https://www.googleapis.com/oauth2/v3/token'
 FILES_URL = 'https://www.googleapis.com/drive/v2/files?orderBy=lastViewedByMeDate+desc&fields=items'
 
-CACHE_MAX_AGE = 60*10 # cache set to 10 minutes
+CACHE_MAX_AGE = 60*60 # cache set to 1 hour
