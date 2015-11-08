@@ -1,7 +1,7 @@
 CLIENT_ID = '978117856621-tvpnqtr02b8u0bgnh75sqb1loq1f5527.apps.googleusercontent.com'
 CLIENT_SECRET = 'rty2NIATZfWFWSDX-XPs2usX'
 SCOPE = 'https://www.googleapis.com/auth/drive.readonly'
-REDIRECT_URI = 'http://localhost:1337'
+REDIRECT_URI = 'http://127.0.0.1:1337'
 
 AUTH_URL = 'https://accounts.google.com/o/oauth2/auth?scope=%s&redirect_uri=%s&response_type=code&client_id=%s&access_type=offline&approval_prompt=force' % (SCOPE, REDIRECT_URI, CLIENT_ID)
 TOKEN_URL = 'https://www.googleapis.com/oauth2/v3/token'
