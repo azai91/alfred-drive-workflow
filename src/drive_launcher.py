@@ -19,7 +19,7 @@ def main(wf):
   elif url.startswith('set'):
     length = int(url[3:])
     Drive.set_cache_length(length)
-    return sys.stdout.write("cache set to " + str(length))
+    return sys.stdout.write("cache set to %s seconds" % str(length))
 
   Drive.open_page(url)
 
