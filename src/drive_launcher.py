@@ -17,13 +17,9 @@ def main(wf):
     Drive.clear_cache()
     return sys.stdout.write("cache cleared")
   elif url[:3] in 'set':
-    length = 0
-    try:
-      length = int(url[3:])
-      Drive.set_cache_length(length)
-      sys.stdout.write("cache set to " + str(length))
-    except:
-      sys.stdout.write("invalid cache time")
+    length = int(url[3:])
+    Drive.set_cache_length(length)
+    sys.stdout.write("cache set to " + str(length))
 
 
   Drive.open_page(url)
