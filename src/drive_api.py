@@ -80,9 +80,13 @@ class Drive:
 
   @classmethod
   def show_items(cls, user_input):
+    cache_length = CACHE_MAX_AGE
     if not wf.get_password('access_token'):
       raise Exception('No access token found')
-    links = wf.cached_data('api_results', cls.get_links, CACHE_MAX_AGE)
+    if wf.stored_data('cache_length'):
+      cache_length = wf.stored_data('cache_length')
+
+    links = wf.cached_data('api_results', cls.get_links, cache_length)
     try:
       links = wf.filter(query=user_input, items=links, key=lambda x : x['title'])
     except:
@@ -104,8 +108,10 @@ class Drive:
     ## add another condition
     if user_input in 'logout':
       cls.show_logout()
-    if user_input in 'clear_cache':
+    if user_input in 'clear cache':
       cls.show_clear_cache()
+    if user_input[:16] in 'set cache length':
+      cls.show_set_cache_length(user_input[17:])
     wf.send_feedback()
 
   @classmethod
@@ -133,6 +139,18 @@ class Drive:
       valid=True)
 
   @classmethod
+  def show_set_cache_length(cls, length):
+    if not len(length):
+      wf.add_item(title='d > set cache length [seconds]',
+        autocomplete='> set cache length',
+        icon=ICON_USER)
+    else:
+      wf.add_item(title='d > set cache length %s seconds' % length,
+        arg='set' + length,
+        icon=ICON_USER,
+        valid=True)
+
+  @classmethod
   def add_update(cls):
     wf.add_item(
       'New version available!',
@@ -142,6 +160,10 @@ class Drive:
   @classmethod
   def clear_cache(cls):
     wf.clear_cache()
+
+  @classmethod
+  def set_cache_length(cls, length):
+    wf.store_data('cache_length', length)
 
 def add_items(links):
   # sorted(links, key=lambda link : link['lastViewedByMeDate'])

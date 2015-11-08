@@ -17,6 +17,7 @@ You have to login (```d > login```) before you can use the workflow. The login u
 - ```d > login```
 - ```d > logout```
 - ```d > clear cache```
+- ```d > set cache [seconds]```
 
 
 ###Please leave issues if you encounter any problems or star this repo if you found it useful :)

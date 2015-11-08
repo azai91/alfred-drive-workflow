@@ -14,7 +14,18 @@ def main(wf):
   elif url[:5] in 'login':
     return Drive.open_auth_page()
   elif url[:5] in 'clear':
-    return Drive.clear_cache()
+    Drive.clear_cache()
+    return sys.stdout.write("cache cleared")
+  elif url[:3] in 'set':
+    length = 0
+    try:
+      length = int(url[3:])
+      Drive.set_cache_length(length)
+      sys.stdout.write("cache set to " + str(length))
+    except:
+      sys.stdout.write("invalid cache time")
+
+
   Drive.open_page(url)
 
 if __name__ == '__main__':
