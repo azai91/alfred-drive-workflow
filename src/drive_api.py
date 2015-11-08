@@ -2,7 +2,7 @@ import json
 import subprocess
 from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI, FILES_URL, AUTH_URL, TOKEN_URL, TOKEN_URL, CACHE_MAX_AGE
 import requests
-from workflow import Workflow, ICON_USER
+from workflow import Workflow, ICON_EJECT, ICON_ACCOUNT, ICON_BURN, ICON_CLOCK
 UPDATE_SETTINGS = {'github_slug' : 'azai91/alfred-drive-workflow'}
 HELP_URL = 'https://github.com/azai91/alfred-drive-workflow/issues'
 
@@ -118,7 +118,7 @@ class Drive:
   def show_login(cls):
     wf.add_item(title='d > login',
       arg='login',
-      icon=ICON_USER,
+      icon=ICON_ACCOUNT,
       autocomplete='> login',
       valid=True)
 
@@ -127,7 +127,7 @@ class Drive:
     wf.add_item(title='d > logout',
       arg='logout',
       autocomplete='> logout',
-      icon=ICON_USER,
+      icon=ICON_EJECT,
       valid=True)
 
   @classmethod
@@ -135,7 +135,7 @@ class Drive:
     wf.add_item(title='d > clear cache',
       arg='clear',
       autocomplete='> clear cache',
-      icon=ICON_USER,
+      icon=ICON_BURN,
       valid=True)
 
   @classmethod
@@ -143,17 +143,17 @@ class Drive:
     if not len(length):
       wf.add_item(title='d > set cache length [seconds]',
         autocomplete='> set cache length ',
-        icon=ICON_USER)
+        icon=ICON_CLOCK)
     else:
       try:
         int(length)
         wf.add_item(title='d > set cache length %s seconds' % length,
           arg='set' + length,
-          icon=ICON_USER,
+          icon=ICON_CLOCK,
           valid=True)
       except:
         wf.add_item(title='please insert valid cache length',
-          icon=ICON_USER)
+          icon=ICON_CLOCK)
 
   @classmethod
   def add_update(cls):
