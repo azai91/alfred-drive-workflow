@@ -142,7 +142,7 @@ class Drive:
   def show_set_cache_length(cls, length):
     if not len(length):
       wf.add_item(title='d > set cache length [seconds]',
-        autocomplete='> set cache length',
+        autocomplete='> set cache length ',
         icon=ICON_USER)
     else:
       wf.add_item(title='d > set cache length %s seconds' % length,
