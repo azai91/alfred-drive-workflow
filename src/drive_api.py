@@ -153,7 +153,7 @@ class Drive:
             try:
                 int(length)
                 wf.add_item(title=SET_CACHE['title'] % util.convert_time(length),
-                    arg=SET_CACHE['arg'] + length,
+                    arg=SET_CACHE['arg'] % length,
                     icon=SET_CACHE['icon'],
                     valid=True)
             except:

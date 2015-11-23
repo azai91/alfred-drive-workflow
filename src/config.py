@@ -37,7 +37,7 @@ CLEAR_CACHE = {
 SET_CACHE = {
     'title' : 'Set cache length %s',
     'autocomplete' : '> Set cache length ',
-    'arg' : 'set',
+    'arg' : 'set%s',
     'icon' : ICON_CLOCK
 }
 

@@ -176,7 +176,7 @@ class TestDrive(unittest.TestCase):
         self.assertEqual(len(wf._items), 1)
         self.assertEqual(wf._items[0].title, SET_CACHE['title'] % '[seconds]')
         self.assertFalse(wf._items[0].arg)
-        self.assertTrue(wf._items[0].valid)
+        self.assertFalse(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '> set C']
@@ -184,7 +184,7 @@ class TestDrive(unittest.TestCase):
         self.assertEqual(len(wf._items), 1)
         self.assertEqual(wf._items[0].title, SET_CACHE['title'] % '[seconds]')
         self.assertFalse(wf._items[0].arg)
-        self.assertTrue(wf._items[0].valid)
+        self.assertFalse(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '>se']
@@ -192,7 +192,7 @@ class TestDrive(unittest.TestCase):
         self.assertEqual(len(wf._items), 1)
         self.assertEqual(wf._items[0].title, SET_CACHE['title'] % '[seconds]')
         self.assertFalse(wf._items[0].arg)
-        self.assertTrue(wf._items[0].valid)
+        self.assertFalse(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '> set cache']
@@ -200,14 +200,22 @@ class TestDrive(unittest.TestCase):
         self.assertEqual(len(wf._items), 1)
         self.assertEqual(wf._items[0].title, SET_CACHE['title'] % '[seconds]')
         self.assertFalse(wf._items[0].arg)
-        self.assertTrue(wf._items[0].valid)
+        self.assertFalse(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '> Set cache length 1']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, SET_CACHE['title'] % '[seconds]')
-        self.assertFalse(wf._items[0].arg)
+        self.assertEqual(wf._items[0].title, SET_CACHE['title'] % '1 second')
+        self.assertEqual(wf._items[0].arg, SET_CACHE['arg'] % str(1))
+        self.assertTrue(wf._items[0].valid)
+        wf._items = []
+
+        sys.argv = ['drive.py', '> Set cache length 12']
+        main(None)
+        self.assertEqual(len(wf._items), 1)
+        self.assertEqual(wf._items[0].title, SET_CACHE['title'] % '12 seconds')
+        self.assertEqual(wf._items[0].arg, SET_CACHE['arg'] % str(12))
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
