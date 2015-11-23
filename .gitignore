@@ -1,2 +1,2 @@
-src/*.pyc
+**/*.pyc
 src/nohup.out
