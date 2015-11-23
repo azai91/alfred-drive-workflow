@@ -104,14 +104,14 @@ class Drive:
 
     @classmethod
     def show_options(cls, user_input):
-        if user_input.lower() in 'login':
+        if 'login'.startswith(user_input.lower()):
             cls.show_login()
         ## add another condition
-        if user_input.lower() in 'logout':
+        if 'logout'.startswith(user_input.lower()):
             cls.show_logout()
-        if user_input.lower() in 'clear cache':
+        if 'clear cache'.startswith(user_input.lower()):
             cls.show_clear_cache()
-        if user_input[:16].lower() in 'set cache length':
+        if 'set cache length'.startswith(user_input[:16].lower()):
             cls.show_set_cache_length(user_input[17:])
 
         if len(wf._items) == 0:
