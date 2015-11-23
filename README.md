@@ -5,7 +5,7 @@ With ```enter``` you can open the entry in your default browser.
 
 [Download](https://github.com/azai91/alfred-drive-workflow/releases)
 
-![inline](./assets/search.png)
+![inline](./assets/example.gif)
 
 ##Getting started
 
