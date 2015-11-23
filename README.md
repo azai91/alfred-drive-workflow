@@ -11,6 +11,8 @@ With ```enter``` you can open the entry in your default browser.
 
 You have to login (```d > login```) before you can use the workflow. The login uses OAuth, so you do not need to enter your credentials.
 
+![inline](./assets/login.png)
+
 ##Commands
 - ```d {query}```
 Searches your Google Drive for files that match that query. You can open the file in your default browser by selecting the file and hitting ```enter```
@@ -26,7 +28,5 @@ Responses from Google Drive API are cached to increase the speed. Use this optio
 
 - ```d > set cache [seconds]```
 Sets the length of the duration for how long responses are held in cache before a fresh request is made. Default is 3600 seconds (1 hour)
-
-![inline](./assets/config.png)
 
 ###Please leave issues if you encounter any problems or star this repo if you found it useful :)
