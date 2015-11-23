@@ -11,7 +11,7 @@ With ```enter``` you can open the entry in your default browser.
 
 You have to login (```d > login```) before you can use the workflow. The login uses OAuth, so you do not need to enter your credentials.
 
-![inline](./assets/login.png)
+![inline](./assets/login.gif)
 
 ##Commands
 - ```d {query}```
