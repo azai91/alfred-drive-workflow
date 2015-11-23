@@ -1,2 +1,2 @@
 test:
-	python -m tests.util_test
+	python -m tests.drive_test

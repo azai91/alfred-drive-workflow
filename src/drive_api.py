@@ -2,6 +2,7 @@ import json
 import subprocess
 from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI, FILES_URL, AUTH_URL, TOKEN_URL, TOKEN_URL, CACHE_MAX_AGE, LOGIN, LOGOUT, SET_CACHE, CLEAR_CACHE, INVALID
 import requests
+import util
 from workflow import Workflow, ICON_EJECT, ICON_ACCOUNT, ICON_BURN, ICON_CLOCK
 UPDATE_SETTINGS = {'github_slug' : 'azai91/alfred-drive-workflow'}
 HELP_URL = 'https://github.com/azai91/alfred-drive-workflow/issues'
@@ -145,13 +146,13 @@ class Drive:
     @classmethod
     def show_set_cache_length(cls, length):
         if not len(length):
-            wf.add_item(title=SET_CACHE['title'],
+            wf.add_item(title=SET_CACHE['title'] % '[seconds]',
                 autocomplete=SET_CACHE['autocomplete'],
                 icon=SET_CACHE['icon'])
         else:
             try:
                 int(length)
-                wf.add_item(title=SET_CACHE['title'] +' %s seconds' % length,
+                wf.add_item(title=SET_CACHE['title'] % util.convert_time(length),
                     arg=SET_CACHE['arg'] + length,
                     icon=SET_CACHE['icon'],
                     valid=True)
