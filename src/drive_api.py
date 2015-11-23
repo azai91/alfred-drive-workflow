@@ -103,7 +103,7 @@ class Drive:
 
     @classmethod
     def show_options(cls, user_input):
-        if user_input in 'login':
+        if user_input.lower() in 'login':
             cls.show_login()
         ## add another condition
         if user_input.lower() in 'logout':
