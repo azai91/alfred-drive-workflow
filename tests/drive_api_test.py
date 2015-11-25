@@ -6,7 +6,7 @@ Unit tests for Driv
 
 import unittest
 import sys
-from src.config import LOGIN, LOGOUT, INVALID, CLEAR_CACHE, SET_CACHE, FILES_URL, ERROR
+from src.config import SETTINGS, FILES_URL, ERRORS
 from tests.sample_data import SAMPLE_ITEMS
 import os
 from src.drive_api import wf, Drive
@@ -28,10 +28,10 @@ class TestDrive(unittest.TestCase):
 
         main(None)
         self.assertEqual(len(wf._items), 4)
-        self.assertEqual(wf._items[0].title, LOGIN['title'])
-        self.assertEqual(wf._items[1].title, LOGOUT['title'])
-        self.assertEqual(wf._items[2].title, CLEAR_CACHE['title'])
-        self.assertEqual(wf._items[3].title, SET_CACHE['title'] % '[seconds]')
+        self.assertEqual(wf._items[0].title, SETTINGS['LOGIN']['title'])
+        self.assertEqual(wf._items[1].title, SETTINGS['LOGOUT']['title'])
+        self.assertEqual(wf._items[2].title, SETTINGS['CLEAR_CACHE']['title'])
+        self.assertEqual(wf._items[3].title, SETTINGS['SET_CACHE']['title'] % '[seconds]')
         wf._items = []
 
     @httpretty.activate
@@ -52,18 +52,18 @@ class TestDrive(unittest.TestCase):
         self.assertEquals(len(wf._items), 0)
         Drive.show_items('c')
         self.assertEquals(len(wf._items), 1)
-        self.assertEquals(wf._items[0].title, LOGIN['title'])
+        self.assertEquals(wf._items[0].title, SETTINGS['LOGIN']['title'])
 
     @httpretty.activate
     def test_show_items_no_internet(self):
-        wf.save_password('access_token', 'test')
+        wf.save_password('drive_access_token', 'test')
         wf._items = []
         Drive.clear_cache()
         httpretty.register_uri(httpretty.GET, FILES_URL, body=exceptionCallback, content_type='text/html');
         self.assertEquals(len(wf._items), 0)
         Drive.show_items('c')
         self.assertEquals(len(wf._items), 1)
-        self.assertEquals(wf._items[0].title, ERROR['ConnectionError']['title'])
+        self.assertEquals(wf._items[0].title, ERRORS['ConnectionError']['title'])
 
 
 

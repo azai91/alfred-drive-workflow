@@ -6,7 +6,7 @@ Unit tests for Driv
 
 import unittest
 import sys
-from src.config import LOGIN, LOGOUT, INVALID, CLEAR_CACHE, SET_CACHE, OPTIONS
+from src.config import SETTINGS, OPTIONS, ERRORS
 import os
 from src.drive import main
 from src.drive_api import wf
@@ -36,10 +36,10 @@ class TestDrive(unittest.TestCase):
         sys.argv = ['drive.py', '>']
         main(None)
         self.assertEqual(len(wf._items), 4)
-        self.assertEqual(wf._items[0].title, LOGIN['title'])
-        self.assertEqual(wf._items[1].title, LOGOUT['title'])
-        self.assertEqual(wf._items[2].title, CLEAR_CACHE['title'])
-        self.assertEqual(wf._items[3].title, SET_CACHE['title'] % '[seconds]')
+        self.assertEqual(wf._items[0].title, SETTINGS['LOGIN']['title'])
+        self.assertEqual(wf._items[1].title, SETTINGS['LOGOUT']['title'])
+        self.assertEqual(wf._items[2].title, SETTINGS['CLEAR_CACHE']['title'])
+        self.assertEqual(wf._items[3].title, SETTINGS['SET_CACHE']['title'] % '[seconds]')
         wf._items = []
 
     def test_invalid_options(self):
@@ -50,7 +50,7 @@ class TestDrive(unittest.TestCase):
         sys.argv = ['drive.py', '> not here']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, INVALID['title'])
+        self.assertEqual(wf._items[0].title, ERRORS['InvalidOption']['title'])
         self.assertFalse(wf._items[0].valid)
         self.assertFalse(wf._items[0].arg)
         wf._items = []
@@ -61,40 +61,40 @@ class TestDrive(unittest.TestCase):
         sys.argv = ['drive.py', '> login']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, LOGIN['title'])
-        self.assertEqual(wf._items[0].arg, LOGIN['arg'])
+        self.assertEqual(wf._items[0].title, SETTINGS['LOGIN']['title'])
+        self.assertEqual(wf._items[0].arg, SETTINGS['LOGIN']['arg'])
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '>login']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, LOGIN['title'])
-        self.assertEqual(wf._items[0].arg, LOGIN['arg'])
+        self.assertEqual(wf._items[0].title, SETTINGS['LOGIN']['title'])
+        self.assertEqual(wf._items[0].arg, SETTINGS['LOGIN']['arg'])
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '>  login']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, LOGIN['title'])
-        self.assertEqual(wf._items[0].arg, LOGIN['arg'])
+        self.assertEqual(wf._items[0].title, SETTINGS['LOGIN']['title'])
+        self.assertEqual(wf._items[0].arg, SETTINGS['LOGIN']['arg'])
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '>  Login']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, LOGIN['title'])
-        self.assertEqual(wf._items[0].arg, LOGIN['arg'])
+        self.assertEqual(wf._items[0].title, SETTINGS['LOGIN']['title'])
+        self.assertEqual(wf._items[0].arg, SETTINGS['LOGIN']['arg'])
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '>  LOGIN']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, LOGIN['title'])
-        self.assertEqual(wf._items[0].arg, LOGIN['arg'])
+        self.assertEqual(wf._items[0].title, SETTINGS['LOGIN']['title'])
+        self.assertEqual(wf._items[0].arg, SETTINGS['LOGIN']['arg'])
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
@@ -106,40 +106,40 @@ class TestDrive(unittest.TestCase):
         sys.argv = ['drive.py', '> logout']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, LOGOUT['title'])
-        self.assertEqual(wf._items[0].arg, LOGOUT['arg'])
+        self.assertEqual(wf._items[0].title, SETTINGS['LOGOUT']['title'])
+        self.assertEqual(wf._items[0].arg, SETTINGS['LOGOUT']['arg'])
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '>logout']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, LOGOUT['title'])
-        self.assertEqual(wf._items[0].arg, LOGOUT['arg'])
+        self.assertEqual(wf._items[0].title, SETTINGS['LOGOUT']['title'])
+        self.assertEqual(wf._items[0].arg, SETTINGS['LOGOUT']['arg'])
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '>  logout']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, LOGOUT['title'])
-        self.assertEqual(wf._items[0].arg, LOGOUT['arg'])
+        self.assertEqual(wf._items[0].title, SETTINGS['LOGOUT']['title'])
+        self.assertEqual(wf._items[0].arg, SETTINGS['LOGOUT']['arg'])
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '>  Logout']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, LOGOUT['title'])
-        self.assertEqual(wf._items[0].arg, LOGOUT['arg'])
+        self.assertEqual(wf._items[0].title, SETTINGS['LOGOUT']['title'])
+        self.assertEqual(wf._items[0].arg, SETTINGS['LOGOUT']['arg'])
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '>  LOGOUT']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, LOGOUT['title'])
-        self.assertEqual(wf._items[0].arg, LOGOUT['arg'])
+        self.assertEqual(wf._items[0].title, SETTINGS['LOGOUT']['title'])
+        self.assertEqual(wf._items[0].arg, SETTINGS['LOGOUT']['arg'])
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
@@ -151,32 +151,32 @@ class TestDrive(unittest.TestCase):
         sys.argv = ['drive.py', '> cl']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, CLEAR_CACHE['title'])
-        self.assertEqual(wf._items[0].arg, CLEAR_CACHE['arg'])
+        self.assertEqual(wf._items[0].title, SETTINGS['CLEAR_CACHE']['title'])
+        self.assertEqual(wf._items[0].arg, SETTINGS['CLEAR_CACHE']['arg'])
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '> clear C']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, CLEAR_CACHE['title'])
-        self.assertEqual(wf._items[0].arg, CLEAR_CACHE['arg'])
+        self.assertEqual(wf._items[0].title, SETTINGS['CLEAR_CACHE']['title'])
+        self.assertEqual(wf._items[0].arg, SETTINGS['CLEAR_CACHE']['arg'])
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '>cl']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, CLEAR_CACHE['title'])
-        self.assertEqual(wf._items[0].arg, CLEAR_CACHE['arg'])
+        self.assertEqual(wf._items[0].title, SETTINGS['CLEAR_CACHE']['title'])
+        self.assertEqual(wf._items[0].arg, SETTINGS['CLEAR_CACHE']['arg'])
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '> clear cache']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, CLEAR_CACHE['title'])
-        self.assertEqual(wf._items[0].arg, CLEAR_CACHE['arg'])
+        self.assertEqual(wf._items[0].title, SETTINGS['CLEAR_CACHE']['title'])
+        self.assertEqual(wf._items[0].arg, SETTINGS['CLEAR_CACHE']['arg'])
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
@@ -188,7 +188,7 @@ class TestDrive(unittest.TestCase):
         sys.argv = ['drive.py', '> set']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, SET_CACHE['title'] % '[seconds]')
+        self.assertEqual(wf._items[0].title, SETTINGS['SET_CACHE']['title'] % '[seconds]')
         self.assertFalse(wf._items[0].arg)
         self.assertFalse(wf._items[0].valid)
         wf._items = []
@@ -196,7 +196,7 @@ class TestDrive(unittest.TestCase):
         sys.argv = ['drive.py', '> set C']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, SET_CACHE['title'] % '[seconds]')
+        self.assertEqual(wf._items[0].title, SETTINGS['SET_CACHE']['title'] % '[seconds]')
         self.assertFalse(wf._items[0].arg)
         self.assertFalse(wf._items[0].valid)
         wf._items = []
@@ -204,7 +204,7 @@ class TestDrive(unittest.TestCase):
         sys.argv = ['drive.py', '>se']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, SET_CACHE['title'] % '[seconds]')
+        self.assertEqual(wf._items[0].title, SETTINGS['SET_CACHE']['title'] % '[seconds]')
         self.assertFalse(wf._items[0].arg)
         self.assertFalse(wf._items[0].valid)
         wf._items = []
@@ -212,7 +212,7 @@ class TestDrive(unittest.TestCase):
         sys.argv = ['drive.py', '> set cache']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, SET_CACHE['title'] % '[seconds]')
+        self.assertEqual(wf._items[0].title, SETTINGS['SET_CACHE']['title'] % '[seconds]')
         self.assertFalse(wf._items[0].arg)
         self.assertFalse(wf._items[0].valid)
         wf._items = []
@@ -220,16 +220,16 @@ class TestDrive(unittest.TestCase):
         sys.argv = ['drive.py', '> Set cache length 1']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, SET_CACHE['title'] % '1 second')
-        self.assertEqual(wf._items[0].arg, SET_CACHE['arg'] % str(1))
+        self.assertEqual(wf._items[0].title, SETTINGS['SET_CACHE']['title'] % '1 second')
+        self.assertEqual(wf._items[0].arg, SETTINGS['SET_CACHE']['arg'] % str(1))
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 
         sys.argv = ['drive.py', '> Set cache length 12']
         main(None)
         self.assertEqual(len(wf._items), 1)
-        self.assertEqual(wf._items[0].title, SET_CACHE['title'] % '12 seconds')
-        self.assertEqual(wf._items[0].arg, SET_CACHE['arg'] % str(12))
+        self.assertEqual(wf._items[0].title, SETTINGS['SET_CACHE']['title'] % '12 seconds')
+        self.assertEqual(wf._items[0].arg, SETTINGS['SET_CACHE']['arg'] % str(12))
         self.assertTrue(wf._items[0].valid)
         wf._items = []
 

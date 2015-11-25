@@ -177,15 +177,15 @@ class Drive:
         """Show set cache length setting"""
 
         if not len(length):
-            wf.add_item(title=SETTING['SET_CACHE']['title'] % '[seconds]',
-                autocomplete=SETTING['SET_CACHE']['autocomplete'],
-                icon=SETTING['SET_CACHE']['icon'])
+            wf.add_item(title=SETTINGS['SET_CACHE']['title'] % '[seconds]',
+                autocomplete=SETTINGS['SET_CACHE']['autocomplete'],
+                icon=SETTINGS['SET_CACHE']['icon'])
         else:
             try:
                 int(length)
-                wf.add_item(title=SETTING['SET_CACHE']['title'] % util.convert_time(length),
-                    arg=SETTING['SET_CACHE']['arg'] % length,
-                    icon=SETTING['SET_CACHE']['icon'],
+                wf.add_item(title=SETTINGS['SET_CACHE']['title'] % util.convert_time(length),
+                    arg=SETTINGS['SET_CACHE']['arg'] % length,
+                    icon=SETTINGS['SET_CACHE']['icon'],
                     valid=True)
             except:
                 wf.add_item(title='please insert valid cache length',
@@ -194,7 +194,7 @@ class Drive:
     @classmethod
     def show_error(cls, error):
         """Displays error"""
-        wf.add_item(title=ERRORS[error]['title'], icon=ERROR[error]['icon'])
+        wf.add_item(title=ERRORS[error]['title'], icon=ERRORS[error]['icon'])
 
     @classmethod
     def add_update(cls):
