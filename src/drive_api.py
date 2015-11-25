@@ -74,13 +74,11 @@ class Drive:
         Returns:
             a list of all spreadsheets and documents from Google Drive
         """
-
         access_token = wf.get_password('drive_access_token')
         headers = {
             'Authorization' : 'Bearer %s' % access_token
         }
         response = requests.get(FILES_URL, headers=headers).json()
-        wf.logger.error("GETTING LINKS")
         # TODO: Log errors to alfred bar
         if 'error' in response and cls.refresh():
             return cls.get_links()
@@ -103,7 +101,6 @@ class Drive:
         cache_length = CACHE_MAX_AGE
         if wf.stored_data('drive_cache_length'):
             cache_length = wf.stored_data('cache_length')
-
         # check if any errors
         if wf.cached_data('drive_error', max_age=0):
             cls.show_error(wf.cached_data('drive_error', max_age=0))

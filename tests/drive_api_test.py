@@ -12,6 +12,7 @@ import os
 from src.drive_api import wf, Drive
 import tests.httpretty as httpretty
 import json
+from src.workflow import PasswordNotFound
 import src.requests as requests
 
 CachedData = {}
@@ -49,7 +50,9 @@ class TestDrive(unittest.TestCase):
         wf._items = []
         Drive.clear_cache()
         Passwords.clear()
-        httpretty.register_uri(httpretty.GET, FILES_URL, body=exceptionCallback, content_type='text/html');
+        httpretty.register_uri(httpretty.GET, FILES_URL, body=json.dumps({
+            'items': SAMPLE_ITEMS
+            }), content_type='application/json');
         self.assertEquals(len(wf._items), 0)
         Drive.show_items('c')
         self.assertEquals(len(wf._items), 1)
@@ -57,9 +60,10 @@ class TestDrive(unittest.TestCase):
 
     @httpretty.activate
     def test_show_items_no_internet(self):
-        wf.save_password('drive_access_token', 'test')
         wf._items = []
+        Passwords.clear()
         Drive.clear_cache()
+        wf.cache_data('drive_error', 'ConnectionError')
         httpretty.register_uri(httpretty.GET, FILES_URL, body=exceptionCallback, content_type='text/html');
         self.assertEquals(len(wf._items), 0)
         Drive.show_items('c')
@@ -72,7 +76,6 @@ class TestDrive(unittest.TestCase):
     def stest_get_links(self):
         wf._items = []
         Drive.clear_cache()
-        print 'wow'
         with self.assertRaises(Exception):
             Drive.get_links()
 
@@ -99,6 +102,12 @@ class TestDrive(unittest.TestCase):
 
         wf.cached_data = cached_data
 
+        def cache_data(key, value):
+            """Save result of calling callback to cache"""
+            CachedData[key] = value
+
+        wf.cache_data = cache_data
+
         def store_data(key, value):
             """Save value in store"""
             StoredData[key] = value
@@ -122,7 +131,10 @@ class TestDrive(unittest.TestCase):
 
         def get_password(key):
             """Returns value from password store"""
-            return Passwords.get(key)
+            password = Passwords.get(key)
+            if not password:
+                raise PasswordNotFound()
+            return password
 
         wf.get_password = get_password
 
