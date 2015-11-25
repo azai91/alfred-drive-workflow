@@ -10,7 +10,7 @@ wf = Workflow(update_settings=UPDATE_SETTINGS, help_url=HELP_URL)
 def main(wf):
   url = wf.args[0]
   if url == 'logout':
-    Drive.delete_credentials()
+    Drive.revoke_tokens()
     return sys.stdout.write("logged out")
   elif url == 'login':
     return Drive.open_auth_page()

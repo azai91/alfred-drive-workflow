@@ -13,44 +13,37 @@ FILES_URL = 'https://www.googleapis.com/drive/v2/files?orderBy=lastViewedByMeDat
 
 CACHE_MAX_AGE = 60*60 # cache set to 1 hour
 
-LOGIN = {
-    'title' : 'Login',
-    'autocomplete' : '> Login',
-    'arg' : 'login',
-    'icon' : ICON_ACCOUNT
+SETTINGS = {
+    'LOGIN' : {
+        'title' : 'Login',
+        'autocomplete' : '> Login',
+        'arg' : 'login',
+        'icon' : ICON_ACCOUNT
+    },
+    'LOGOUT' : {
+        'title' : 'Logout',
+        'autocomplete' : '> Logout',
+        'arg' : 'logout',
+        'icon' : ICON_EJECT
+    },
+    'CLEAR_CACHE' : {
+        'title' : 'Clear cache',
+        'autocomplete' : '> Clear cache',
+        'arg' : 'clear',
+        'icon' : ICON_SYNC
+    },
+    'SET_CACHE' : {
+        'title' : 'Set cache length %s',
+        'autocomplete' : '> Set cache length ',
+        'arg' : 'set%s',
+        'icon' : ICON_CLOCK
+    }
 }
 
-LOGOUT = {
-    'title' : 'Logout',
-    'autocomplete' : '> Logout',
-    'arg' : 'logout',
-    'icon' : ICON_EJECT
-}
 
-CLEAR_CACHE = {
-    'title' : 'Clear cache',
-    'autocomplete' : '> Clear cache',
-    'arg' : 'clear',
-    'icon' : ICON_SYNC
-}
 
-SET_CACHE = {
-    'title' : 'Set cache length %s',
-    'autocomplete' : '> Set cache length ',
-    'arg' : 'set%s',
-    'icon' : ICON_CLOCK
-}
-
-INVALID = {
-    'title' : 'Invalid option',
-    'icon' : ICON_WARNING
-}
-
-INVALID_FORMAT = {
-    'title' : 'Please insert properly formatted amount'
-}
-
-OPTIONS = [{
+OPTIONS = [
+    {
         'title' : 'Search Google Drive'
     },
     {
@@ -59,9 +52,13 @@ OPTIONS = [{
 ]
 
 
-ERROR = {
+ERRORS = {
     'ConnectionError' : {
         'title' : 'Error with connection',
+        'icon' : ICON_WARNING
+    },
+    'InvalidOption' : {
+        'title' : 'Invalid option',
         'icon' : ICON_WARNING
     }
 }

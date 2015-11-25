@@ -1,6 +1,6 @@
 import json
 import subprocess
-from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI, FILES_URL, AUTH_URL, TOKEN_URL, TOKEN_URL, CACHE_MAX_AGE, LOGIN, LOGOUT, SET_CACHE, CLEAR_CACHE, INVALID, ERROR, OPTIONS
+from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI, FILES_URL, AUTH_URL, TOKEN_URL, TOKEN_URL, CACHE_MAX_AGE, ERRORS, OPTIONS, SETTINGS
 import requests
 import util
 from time import sleep
@@ -15,45 +15,53 @@ class Drive:
 
     @classmethod
     def open_auth_page(cls):
-        subprocess.Popen(['nohup','python','./server.py'])
+        """Starts server for redirect uri and opens
+        authenicatin page
+        """
+
+        subprocess.Popen(['nohup', 'python', './server.py'])
         subprocess.call(['open', AUTH_URL])
 
     @classmethod
     def exchange_tokens(cls, code):
-        response = requests.post(TOKEN_URL,{
+        """Exchange code for access and refresh token
+
+        Store tokens in workflow
+        """
+
+
+        response = requests.post(TOKEN_URL, {
             'code': code,
             'client_id' : CLIENT_ID,
             'client_secret' : CLIENT_SECRET,
             'redirect_uri' : REDIRECT_URI,
             'grant_type' : 'authorization_code'
         }).json()
-        wf.save_password('access_token', response['access_token'])
-        wf.save_password('refresh_token', response['refresh_token'])
+        wf.save_password('drive_access_token', response['access_token'])
+        wf.save_password('drive_refresh_token', response['refresh_token'])
 
     @classmethod
-    def get_request_token(cls):
-        cls.start_server()
-        subprocess.call(['open', cls.get_auth_url()])
+    def revoke_tokens(cls):
+        """Revoke and delete tokens"""
 
-    @classmethod
-    def delete_credentials(cls):
-        wf.delete_password('access_token','')
-
-    @classmethod
-    def get_access_token(cls):
-        return wf.get_password('access_token')
+        access_token = wf.get_password('drive_access_token')
+        requests.get('https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token)
+        wf.delete_password('drive_access_token')
+        wf.delete_password('drive_refresh_token')
 
     @classmethod
     def refresh(cls):
-        refresh_token = wf.get_password('refresh_token')
+        """Refresh access token"""
+
+        refresh_token = wf.get_password('drive_refresh_token')
         try:
-            response = requests.post(TOKEN_URL,{
+            response = requests.post(TOKEN_URL, {
                 'client_id' : CLIENT_ID,
                 'client_secret' : CLIENT_SECRET,
                 'refresh_token' : refresh_token,
                 'grant_type' : 'refresh_token'
             }).json()
-            wf.save_password('access_token', response['access_token'])
+            wf.save_password('drive_access_token', response['access_token'])
             return 1
         except:
             wf.logger.error('Error Refreshing')
@@ -61,48 +69,43 @@ class Drive:
 
     @classmethod
     def get_links(cls):
-        wf.logger.error('getting links')
-        access_token = wf.get_password('access_token')
+        """Get all files from google drive_refresh
+
+        Returns:
+            a list of all spreadsheets and documents from Google Drive
+        """
+
+        access_token = wf.get_password('drive_access_token')
         headers = {
             'Authorization' : 'Bearer %s' % access_token
         }
-        response = requests.get(FILES_URL,headers=headers).json()
+        response = requests.get(FILES_URL, headers=headers).json()
+
+        # TODO: Log errors to alfred bar
         if 'error' in response and cls.refresh():
             return cls.get_links()
         else:
             unfiltered_list = response['items']
-            return util.filter_by_file_type(unfiltered_list,['spreadsheet','document'])
+            return util.filter_by_file_type(unfiltered_list, ['spreadsheet', 'document'])
 
     @classmethod
     def refresh_list(cls):
+        """Spawn subprocess to populate response from Google Drive"""
+
         if not is_running('drive_refresh'):
             wf.logger.error('spawning new')
             cmd = ['/usr/bin/python', wf.workflowfile('drive_refresh.py')]
             run_in_background('drive_refresh', cmd)
 
     @classmethod
-    def open_page(cls,url):
-        subprocess.call(['open',url])
-
-    @classmethod
-    def revoke_token(cls):
-        access_token = wf.save_password('access_token','')
-        return requests.get('https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token)
-
-    @classmethod
     def show_items(cls, user_input):
         cache_length = CACHE_MAX_AGE
-        if not wf.get_password('access_token'):
+        if not wf.get_password('drive_access_token'):
             cls.show_settings('login')
             return wf.send_feedback()
-        if wf.stored_data('cache_length'):
+        if wf.stored_data('drive_cache_length'):
             cache_length = wf.stored_data('cache_length')
 
-        # # if util.internet_on():
-        #     links = wf.cached_data('drive_api_results', cls.get_links, cache_length)
-        # else:
-        #     cls.show_error('ConnectionError')
-        #     d return wf.send_feedback()
         try:
             links = wf.cached_data('drive_api_results', cls.get_links, cache_length)
         except requests.ConnectionError as e:
@@ -130,78 +133,68 @@ class Drive:
 
     @classmethod
     def show_options(cls):
+        """Show options"""
+
         for option in OPTIONS:
             wf.add_item(title=option['title'])
         wf.send_feedback()
 
     @classmethod
     def show_settings(cls, user_input):
+        """Show settings depending on user input
+
+        Args:
+            user_input, a string that contains users setting preference
+        """
+
         if 'login'.startswith(user_input.lower()):
-            cls.show_login()
+            cls.show_setting('LOGIN')
         ## add another condition
         if 'logout'.startswith(user_input.lower()):
-            cls.show_logout()
+            cls.show_setting('LOGOUT')
         if 'clear cache'.startswith(user_input.lower()):
-            cls.show_clear_cache()
+            cls.show_setting('CLEAR_CACHE')
         if 'set cache length'.startswith(user_input[:16].lower()):
             cls.show_set_cache_length(user_input[17:])
 
         if len(wf._items) == 0:
-            cls.show_invalid_option()
+            cls.show_error('InvalidOption')
 
         wf.send_feedback()
 
     @classmethod
-    def show_login(cls):
-        wf.add_item(title=LOGIN['title'],
-            arg=LOGIN['arg'],
-            icon=LOGIN['icon'],
-            autocomplete=LOGIN['autocomplete'],
-            valid=True)
+    def show_setting(cls, setting):
+        """Show settings"""
 
-    @classmethod
-    def show_logout(cls):
-        wf.add_item(title=LOGOUT['title'],
-            arg=LOGOUT['arg'],
-            autocomplete=LOGOUT['autocomplete'],
-            icon=LOGOUT['icon'],
-            valid=True)
-
-    @classmethod
-    def show_clear_cache(cls):
-        wf.add_item(title=CLEAR_CACHE['title'],
-            arg=CLEAR_CACHE['arg'],
-            autocomplete=CLEAR_CACHE['autocomplete'],
-            icon=CLEAR_CACHE['icon'],
+        wf.add_item(title=SETTINGS[setting]['title'],
+            arg=SETTINGS[setting]['arg'],
+            icon=SETTINGS[setting]['icon'],
+            autocomplete=SETTINGS[setting]['autocomplete'],
             valid=True)
 
     @classmethod
     def show_set_cache_length(cls, length):
+        """Show set cache length setting"""
+
         if not len(length):
-            wf.add_item(title=SET_CACHE['title'] % '[seconds]',
-                autocomplete=SET_CACHE['autocomplete'],
-                icon=SET_CACHE['icon'])
+            wf.add_item(title=SETTING['SET_CACHE']['title'] % '[seconds]',
+                autocomplete=SETTING['SET_CACHE']['autocomplete'],
+                icon=SETTING['SET_CACHE']['icon'])
         else:
             try:
                 int(length)
-                wf.add_item(title=SET_CACHE['title'] % util.convert_time(length),
-                    arg=SET_CACHE['arg'] % length,
-                    icon=SET_CACHE['icon'],
+                wf.add_item(title=SETTING['SET_CACHE']['title'] % util.convert_time(length),
+                    arg=SETTING['SET_CACHE']['arg'] % length,
+                    icon=SETTING['SET_CACHE']['icon'],
                     valid=True)
             except:
                 wf.add_item(title='please insert valid cache length',
                     icon=ICON_CLOCK)
 
     @classmethod
-    def show_invalid_option(cls):
-            """Display invalid option"""
-
-            wf.add_item(title=INVALID['title'],
-                                    icon=INVALID['icon'])
-
-    @classmethod
     def show_error(cls, error):
-        wf.add_item(title=ERROR[error]['title'], icon=ERROR[error]['icon'])
+        """Displays error"""
+        wf.add_item(title=ERRORS[error]['title'], icon=ERROR[error]['icon'])
 
     @classmethod
     def add_update(cls):
@@ -216,7 +209,7 @@ class Drive:
 
     @classmethod
     def set_cache_length(cls, length):
-        wf.store_data('cache_length', length)
+        wf.store_data('drive_cache_length', length)
 
     @classmethod
     def add_items(cls, links):
