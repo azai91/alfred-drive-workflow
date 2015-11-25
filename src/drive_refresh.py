@@ -26,8 +26,8 @@ def main():
         print error
         if error == 'URLError':
             error = 'ConnectionError'
-        print error
         wf.cache_data('drive_error', error)
+    return 0
 
 if __name__ == '__main__':
     main() # pragma: no cover
