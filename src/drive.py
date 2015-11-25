@@ -21,10 +21,10 @@ def main(_):
   if options:
     Drive.show_options(user_input)
   elif len(user_input):
-    try:
-      Drive.show_items(user_input)
-    except:
-      Drive.show_options('login')
+    # try:
+    Drive.show_items(user_input)
+    # except: figure out speciic error, could be internet, login
+      # Drive.show_options('login')
 
   return 0
 

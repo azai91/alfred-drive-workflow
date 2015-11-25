@@ -1,9 +1,10 @@
 import json
 import subprocess
-from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI, FILES_URL, AUTH_URL, TOKEN_URL, TOKEN_URL, CACHE_MAX_AGE, LOGIN, LOGOUT, SET_CACHE, CLEAR_CACHE, INVALID
+from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI, FILES_URL, AUTH_URL, TOKEN_URL, TOKEN_URL, CACHE_MAX_AGE, LOGIN, LOGOUT, SET_CACHE, CLEAR_CACHE, INVALID, CONNECTION_ERROR
 import requests
 import util
-from workflow import Workflow, ICON_EJECT, ICON_ACCOUNT, ICON_BURN, ICON_CLOCK
+from workflow import Workflow, ICON_EJECT, ICON_ACCOUNT, ICON_BURN, ICON_CLOCK, ICON_WARNING
+from workflow.background import is_running, run_in_background
 UPDATE_SETTINGS = {'github_slug' : 'azai91/alfred-drive-workflow'}
 HELP_URL = 'https://github.com/azai91/alfred-drive-workflow/issues'
 
@@ -42,6 +43,10 @@ class Drive:
         wf.delete_password('access_token','')
 
     @classmethod
+    def get_access_token(cls):
+        return wf.get_password('access_token')
+
+    @classmethod
     def refresh(cls):
         refresh_token = wf.get_password('refresh_token')
         try:
@@ -58,17 +63,24 @@ class Drive:
             return 0
 
     @classmethod
-    def get_links(cls):
-        access_token = wf.get_password('access_token')
-        headers = {
-            'Authorization' : 'Bearer %s' % access_token
-        }
-        response = requests.get(FILES_URL,headers=headers).json()
-        if 'error' in response and cls.refresh():
-            return cls.get_links()
-        else:
-            unfiltered_list = response['items']
-            return filter_by_file_type(unfiltered_list,['spreadsheet','document'])
+    def get_links(cls, tries=10):
+        links = wf.cached_data('drive_api_results', max_age=120)
+        # Wait for data
+        while links is None:
+            cls.refresh_list()
+            sleep(0.5)
+            links = wf.cached_data('drive_api_results', max_age=120)
+            if tries > 0:
+                tries -= 1
+            else:
+                return []
+        return links
+
+    @classmethod
+    def refresh_list(cls):
+        if not is_running('drive_refresh'):
+            cmd = ['/usr/bin/python', wf.workflowfile('drive_refresh.py')]
+            run_in_background('drive_refresh', cmd)
 
     @classmethod
     def open_page(cls,url):
@@ -87,7 +99,20 @@ class Drive:
         if wf.stored_data('cache_length'):
             cache_length = wf.stored_data('cache_length')
 
-        links = wf.cached_data('api_results', cls.get_links, cache_length)
+        # # if util.internet_on():
+        #     links = wf.cached_data('drive_api_results', cls.get_links, cache_length)
+        # else:
+        #     cls.show_error('ConnectionError')
+        #     d return wf.send_feedback()
+
+        links = wf.cached_data('drive_api_results')
+
+        # internet
+        # try:
+
+        # except requests.ConnectionError:
+
+
         try:
             links = wf.filter(query=user_input, items=links, key=lambda x : x['title'])
         except:
@@ -96,6 +121,7 @@ class Drive:
         if len(links):
             add_items(links)
         else:
+            # place in config
             wf.add_item(
                 title='No files found',
                 icon=ICON_WARNING)
@@ -168,6 +194,13 @@ class Drive:
                                     icon=INVALID['icon'])
 
     @classmethod
+    def show_error(cls, error):
+        if error == 'ConnectionError':
+            ERROR = CONNECTION_ERROR
+
+        wf.add_item(title=ERROR['title'], icon=ERROR['icon'])
+
+    @classmethod
     def add_update(cls):
         wf.add_item(
             'New version available!',
@@ -193,20 +226,4 @@ def add_items(links):
             arg=alternateLink,
             icon=icon,
             valid=True)
-
-def filter_by_file_type(list, file_types):
-    filter_list = []
-    for index, link in enumerate(list):
-        type = ''
-        try:
-            type = link['mimeType'].split('.')[2]
-        except:
-            pass
-        if type in file_types:
-            # refactor
-            icon = './icons/sheets.png' if type == 'spreadsheet' else './icons/docs.png'
-            link['icon'] = icon
-            link['type'] = type
-            filter_list.append(link)
-    return filter_list
 
