@@ -55,11 +55,24 @@ OPTIONS = [
 ERRORS = {
     'ConnectionError' : {
         'title' : 'Error with connection',
-        'icon' : ICON_WARNING
+        'icon' : ICON_WARNING,
+        'arg' : None,
+        'valid' : False,
+        'subtitle' : None
     },
     'InvalidOption' : {
         'title' : 'Invalid option',
-        'icon' : ICON_WARNING
+        'icon' : ICON_WARNING,
+        'arg' : None,
+        'valid' : False,
+        'subtitle' : None
+    },
+    'PasswordNotFound' : {
+        'title' : 'Account not found, please login',
+        'icon' : ICON_WARNING,
+        'arg' : 'login',
+        'subtitle' : 'Click to login',
+        'valid' : True
     }
 }
 

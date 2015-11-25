@@ -4,7 +4,7 @@ from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI, FILES_URL, AUT
 import requests
 import util
 from time import sleep
-from workflow import Workflow, ICON_EJECT, ICON_ACCOUNT, ICON_BURN, ICON_CLOCK, ICON_WARNING
+from workflow import Workflow, ICON_EJECT, ICON_ACCOUNT, ICON_BURN, ICON_CLOCK, ICON_WARNING, PasswordNotFound
 from workflow.background import is_running, run_in_background
 UPDATE_SETTINGS = {'github_slug' : 'azai91/alfred-drive-workflow'}
 HELP_URL = 'https://github.com/azai91/alfred-drive-workflow/issues'
@@ -80,7 +80,7 @@ class Drive:
             'Authorization' : 'Bearer %s' % access_token
         }
         response = requests.get(FILES_URL, headers=headers).json()
-
+        wf.logger.error("GETTING LINKS")
         # TODO: Log errors to alfred bar
         if 'error' in response and cls.refresh():
             return cls.get_links()
@@ -100,20 +100,18 @@ class Drive:
     @classmethod
     def show_items(cls, user_input):
         cache_length = CACHE_MAX_AGE
-        if not wf.get_password('drive_access_token'):
-            cls.show_settings('login')
-            return wf.send_feedback()
         if wf.stored_data('drive_cache_length'):
             cache_length = wf.stored_data('cache_length')
 
-        try:
-            links = wf.cached_data('drive_api_results', cls.get_links, cache_length)
-        except requests.ConnectionError as e:
-            cls.show_error(type(e).__name__)
-            return wf.send_feedback()
-
+        # check if any errors
         if wf.cached_data('drive_error', max_age=0):
             cls.show_error(wf.cached_data('drive_error', max_age=0))
+            return wf.send_feedback()
+
+        try:
+            links = wf.cached_data('drive_api_results', cls.get_links, cache_length)
+        except (requests.ConnectionError, PasswordNotFound), e:
+            cls.show_error(type(e).__name__)
             return wf.send_feedback()
 
         try:
@@ -194,7 +192,11 @@ class Drive:
     @classmethod
     def show_error(cls, error):
         """Displays error"""
-        wf.add_item(title=ERRORS[error]['title'], icon=ERRORS[error]['icon'])
+        wf.add_item(title=ERRORS[error]['title'],
+            icon=ERRORS[error]['icon'],
+            valid=ERRORS[error]['valid'],
+            arg=ERRORS[error]['arg'],
+            subtitle=ERRORS[error]['subtitle'])
 
     @classmethod
     def add_update(cls):

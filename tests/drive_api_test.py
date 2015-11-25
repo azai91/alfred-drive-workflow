@@ -48,11 +48,12 @@ class TestDrive(unittest.TestCase):
     def test_show_items_no_access_token(self):
         wf._items = []
         Drive.clear_cache()
+        Passwords.clear()
         httpretty.register_uri(httpretty.GET, FILES_URL, body=exceptionCallback, content_type='text/html');
         self.assertEquals(len(wf._items), 0)
         Drive.show_items('c')
         self.assertEquals(len(wf._items), 1)
-        self.assertEquals(wf._items[0].title, SETTINGS['LOGIN']['title'])
+        self.assertEquals(wf._items[0].title, ERRORS['PasswordNotFound']['title'])
 
     @httpretty.activate
     def test_show_items_no_internet(self):
