@@ -50,7 +50,19 @@ INVALID_FORMAT = {
     'title' : 'Please insert properly formatted amount'
 }
 
-CONNECTION_ERROR = {
-    'title' : 'Error with connection',
-    'icon' : ICON_WARNING
+OPTIONS = [{
+        'title' : 'Search Google Drive'
+    },
+    {
+        'title' : 'Type ">" for Settings'
+    }
+]
+
+
+ERROR = {
+    'ConnectionError' : {
+        'title' : 'Error with connection',
+        'icon' : ICON_WARNING
+    }
 }
+

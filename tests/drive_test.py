@@ -6,13 +6,27 @@ Unit tests for Driv
 
 import unittest
 import sys
-from src.config import LOGIN, LOGOUT, INVALID, CLEAR_CACHE, SET_CACHE
+from src.config import LOGIN, LOGOUT, INVALID, CLEAR_CACHE, SET_CACHE, OPTIONS
 import os
 from src.drive import main
 from src.drive_api import wf
 
 class TestDrive(unittest.TestCase):
     """Unit tests of Drive"""
+
+
+    def test_options(self):
+        """Test if settings are displayed properly"""
+
+        wf._items = []
+
+        sys.argv = ['drive.py', '']
+        main(None)
+        self.assertEqual(len(wf._items), 2)
+        self.assertEqual(wf._items[0].title, OPTIONS[0]['title'])
+        self.assertEqual(wf._items[1].title, OPTIONS[1]['title'])
+        wf._items = []
+
 
     def test_settings(self):
         """Test if settings are displayed properly"""

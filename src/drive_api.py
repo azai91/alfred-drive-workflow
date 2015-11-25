@@ -1,8 +1,9 @@
 import json
 import subprocess
-from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI, FILES_URL, AUTH_URL, TOKEN_URL, TOKEN_URL, CACHE_MAX_AGE, LOGIN, LOGOUT, SET_CACHE, CLEAR_CACHE, INVALID, CONNECTION_ERROR
+from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI, FILES_URL, AUTH_URL, TOKEN_URL, TOKEN_URL, CACHE_MAX_AGE, LOGIN, LOGOUT, SET_CACHE, CLEAR_CACHE, INVALID, ERROR, OPTIONS
 import requests
 import util
+from time import sleep
 from workflow import Workflow, ICON_EJECT, ICON_ACCOUNT, ICON_BURN, ICON_CLOCK, ICON_WARNING
 from workflow.background import is_running, run_in_background
 UPDATE_SETTINGS = {'github_slug' : 'azai91/alfred-drive-workflow'}
@@ -59,22 +60,23 @@ class Drive:
             return 0
 
     @classmethod
-    def get_links(cls, tries=10):
-        links = wf.cached_data('drive_api_results', max_age=120)
-        # Wait for data
-        while links is None:
-            cls.refresh_list()
-            sleep(0.5)
-            links = wf.cached_data('drive_api_results', max_age=120)
-            if tries > 0:
-                tries -= 1
-            else:
-                return []
-        return links
+    def get_links(cls):
+        wf.logger.error('getting links')
+        access_token = wf.get_password('access_token')
+        headers = {
+            'Authorization' : 'Bearer %s' % access_token
+        }
+        response = requests.get(FILES_URL,headers=headers).json()
+        if 'error' in response and cls.refresh():
+            return cls.get_links()
+        else:
+            unfiltered_list = response['items']
+            return util.filter_by_file_type(unfiltered_list,['spreadsheet','document'])
 
     @classmethod
     def refresh_list(cls):
         if not is_running('drive_refresh'):
+            wf.logger.error('spawning new')
             cmd = ['/usr/bin/python', wf.workflowfile('drive_refresh.py')]
             run_in_background('drive_refresh', cmd)
 
@@ -91,7 +93,8 @@ class Drive:
     def show_items(cls, user_input):
         cache_length = CACHE_MAX_AGE
         if not wf.get_password('access_token'):
-            raise Exception('No access token found')
+            cls.show_settings('login')
+            return wf.send_feedback()
         if wf.stored_data('cache_length'):
             cache_length = wf.stored_data('cache_length')
 
@@ -100,14 +103,15 @@ class Drive:
         # else:
         #     cls.show_error('ConnectionError')
         #     d return wf.send_feedback()
+        try:
+            links = wf.cached_data('drive_api_results', cls.get_links, cache_length)
+        except requests.ConnectionError as e:
+            cls.show_error(type(e).__name__)
+            return wf.send_feedback()
 
-        links = wf.cached_data('drive_api_results')
-
-        # internet
-        # try:
-
-        # except requests.ConnectionError:
-
+        if wf.cached_data('drive_error', max_age=0):
+            cls.show_error(wf.cached_data('drive_error', max_age=0))
+            return wf.send_feedback()
 
         try:
             links = wf.filter(query=user_input, items=links, key=lambda x : x['title'])
@@ -125,7 +129,13 @@ class Drive:
         wf.send_feedback()
 
     @classmethod
-    def show_options(cls, user_input):
+    def show_options(cls):
+        for option in OPTIONS:
+            wf.add_item(title=option['title'])
+        wf.send_feedback()
+
+    @classmethod
+    def show_settings(cls, user_input):
         if 'login'.startswith(user_input.lower()):
             cls.show_login()
         ## add another condition
@@ -191,10 +201,7 @@ class Drive:
 
     @classmethod
     def show_error(cls, error):
-        if error == 'ConnectionError':
-            ERROR = CONNECTION_ERROR
-
-        wf.add_item(title=ERROR['title'], icon=ERROR['icon'])
+        wf.add_item(title=ERROR[error]['title'], icon=ERROR[error]['icon'])
 
     @classmethod
     def add_update(cls):

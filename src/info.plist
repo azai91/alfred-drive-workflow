@@ -45,7 +45,7 @@
 			<key>config</key>
 			<dict>
 				<key>argumenttype</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
@@ -77,6 +77,25 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>1</integer>
+				<key>script</key>
+				<string>python drive_launcher.py "{query}"</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>AA12A00A-5FE2-4B3A-A097-7AE9E1753D5E</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>lastpathcomponent</key>
 				<false/>
 				<key>onlyshowifquerypopulated</key>
@@ -96,25 +115,6 @@
 			<string>alfred.workflow.output.notification</string>
 			<key>uid</key>
 			<string>C1B4C8BA-4178-4D5D-B85A-9DEEECA5959B</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>concurrently</key>
-				<false/>
-				<key>escaping</key>
-				<integer>1</integer>
-				<key>script</key>
-				<string>python drive_launcher.py "{query}"</string>
-				<key>type</key>
-				<integer>0</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.script</string>
-			<key>uid</key>
-			<string>AA12A00A-5FE2-4B3A-A097-7AE9E1753D5E</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
