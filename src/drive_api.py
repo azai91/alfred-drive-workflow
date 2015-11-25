@@ -14,12 +14,8 @@ class Drive:
 
     @classmethod
     def open_auth_page(cls):
-        cls.start_auth_server()
-        subprocess.call(['open', AUTH_URL])
-
-    @classmethod
-    def start_auth_server(cls):
         subprocess.Popen(['nohup','python','./server.py'])
+        subprocess.call(['open', AUTH_URL])
 
     @classmethod
     def exchange_tokens(cls, code):
@@ -119,7 +115,7 @@ class Drive:
             links = []
 
         if len(links):
-            add_items(links)
+            cls.add_items(links)
         else:
             # place in config
             wf.add_item(
@@ -215,15 +211,16 @@ class Drive:
     def set_cache_length(cls, length):
         wf.store_data('cache_length', length)
 
-def add_items(links):
-    # sorted(links, key=lambda link : link['lastViewedByMeDate'])
-    for index, link in enumerate(links):
-        title = link['title']
-        alternateLink = link['alternateLink']
-        icon = link['icon']
-        wf.add_item(
-            title=title,
-            arg=alternateLink,
-            icon=icon,
-            valid=True)
+    @classmethod
+    def add_items(cls, links):
+        # sorted(links, key=lambda link : link['lastViewedByMeDate'])
+        for index, link in enumerate(links):
+            title = link['title']
+            alternateLink = link['alternateLink']
+            icon = link['icon']
+            wf.add_item(
+                title=title,
+                arg=alternateLink,
+                icon=icon,
+                valid=True)
 
