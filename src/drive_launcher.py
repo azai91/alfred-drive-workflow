@@ -1,6 +1,7 @@
 import sys
 from drive_api import Drive
 from workflow import Workflow
+import subprocess
 
 UPDATE_SETTINGS = {'github_slug' : 'azai91/alfred-drive-workflow'}
 HELP_URL = 'https://github.com/azai91/alfred-drive-workflow/issues'
@@ -22,7 +23,7 @@ def main(wf):
         Drive.set_cache_length(length)
         return sys.stdout.write('cache set to %s seconds' % str(length))
 
-    Drive.open_page(url)
+    subprocess.call(['open', url])
 
 if __name__ == '__main__':
     sys.exit(wf.run(main))
