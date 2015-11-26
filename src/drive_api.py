@@ -132,7 +132,8 @@ class Drive:
         """Show options"""
 
         for option in OPTIONS:
-            wf.add_item(title=option['title'])
+            wf.add_item(title=option['title'],
+                autocomplete=option['autocomplete'])
         wf.send_feedback()
 
     @classmethod

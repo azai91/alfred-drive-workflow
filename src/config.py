@@ -44,10 +44,12 @@ SETTINGS = {
 
 OPTIONS = [
     {
-        'title' : 'Search Google Drive'
+        'title' : 'Search Google Drive',
+        'autocomplete' : None
     },
     {
-        'title' : 'Type ">" for Settings'
+        'title' : 'Type ">" for Settings',
+        'autocomplete' : '> '
     }
 ]
 
