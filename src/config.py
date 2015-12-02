@@ -9,9 +9,9 @@ REDIRECT_URI = 'http://127.0.0.1:1337'
 AUTH_URL = 'https://accounts.google.com/o/oauth2/auth?scope=%s&redirect_uri=%s&response_type=code&client_id=%s&access_type=offline&approval_prompt=force' % (SCOPE, REDIRECT_URI, CLIENT_ID)
 
 TOKEN_URL = 'https://www.googleapis.com/oauth2/v3/token'
-FILES_URL = 'https://www.googleapis.com/drive/v2/files?orderBy=lastViewedByMeDate+desc&fields=items'
+FILES_URL = 'https://www.googleapis.com/drive/v2/files?fields=items'
 
-CACHE_MAX_AGE = 60*60 # cache set to 1 hour
+CACHE_MAX_AGE = 60*60*24*30 # cache set to 1 month
 
 SETTINGS = {
     'LOGIN' : {
@@ -40,8 +40,6 @@ SETTINGS = {
     }
 }
 
-
-
 OPTIONS = [
     {
         'title' : 'Search Google Drive',
@@ -52,7 +50,6 @@ OPTIONS = [
         'autocomplete' : '> '
     }
 ]
-
 
 ERRORS = {
     'ConnectionError' : {
