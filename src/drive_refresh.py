@@ -17,7 +17,7 @@ wf = Workflow(update_settings=UPDATE_SETTINGS, help_url=HELP_URL)
 def main():
     try:
         # test if internet is working
-        urllib2.urlopen('http://google.com',timeout=1)
+        urllib2.urlopen('http://google.com', timeout=1)
         results = Drive.get_links()
         wf.cache_data('drive_api_results', results)
         wf.cache_data('drive_error', None) #No error if able to make requests
