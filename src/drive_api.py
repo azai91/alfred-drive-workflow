@@ -89,10 +89,8 @@ class Drive:
     @classmethod
     def refresh_list(cls):
         """Spawn subprocess to populate response from Google Drive"""
-        wf.logger.error('spawning new')
 
         if not is_running('drive_refresh'):
-            wf.logger.error('spawning new seRIOUSl')
             cmd = ['/usr/bin/python', wf.workflowfile('drive_refresh.py')]
             run_in_background('drive_refresh', cmd)
 
