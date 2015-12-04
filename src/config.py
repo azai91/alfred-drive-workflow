@@ -9,7 +9,7 @@ REDIRECT_URI = 'http://127.0.0.1:1337'
 AUTH_URL = 'https://accounts.google.com/o/oauth2/auth?scope=%(scope)s&redirect_uri=%(redirect_uri)s&response_type=code&client_id=%(client_id)s&access_type=offline&approval_prompt=force' % {'scope' : SCOPE, 'redirect_uri' : REDIRECT_URI, 'client_id' : CLIENT_ID}
 
 TOKEN_URL = 'https://www.googleapis.com/oauth2/v3/token'
-FILES_URL = 'https://www.googleapis.com/drive/v2/files?fields=items&q=mimeType%3D%22application%2Fvnd.google-apps.document%22+or+mimeType%3D%22application%2Fvnd.google-apps.spreadsheet%22'
+FILES_URL = 'https://www.googleapis.com/drive/v2/files?maxResults=1000&q=mimeType%3D%22application%2Fvnd.google-apps.document%22+or+mimeType%3D%22application%2Fvnd.google-apps.spreadsheet%22+or+mimeType%3D%22application%2Fvnd.google-apps.presentation%22&fields=items'
 
 CACHE_MAX_AGE = 60*60*24*30 # cache set to 1 month
 

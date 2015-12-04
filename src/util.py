@@ -14,18 +14,11 @@ def internet_on():
     except urllib2.URLError as err: pass
     return False
 
-def filter_by_file_type(list, file_types):
-    filter_list = []
-    for index, link in enumerate(list):
-        type = ''
-        try:
-            type = link['mimeType'].split('.')[2]
-        except:
-            pass
-        if type in file_types:
-            # refactor
-            icon = './icons/sheets.png' if type == 'spreadsheet' else './icons/docs.png'
-            link['icon'] = icon
-            link['type'] = type
-            filter_list.append(link)
-    return filter_list
+def find_icon(link):
+    if link['mimeType'] == 'application/vnd.google-apps.document':
+        icon = './icons/docs.png'
+    elif link['mimeType'] == 'application/vnd.google-apps.spreadsheet':
+        icon = './icons/sheets.png'
+    elif link['mimeType'] == 'application/vnd.google-apps.presentation':
+        icon = './icons/slides.png'
+    return icon

@@ -83,8 +83,7 @@ class Drive:
         if 'error' in response and cls.refresh():
             return cls.get_links()
         else:
-            unfiltered_list = response['items']
-            return util.filter_by_file_type(unfiltered_list, ['spreadsheet', 'document'])
+            return response['items']
 
     @classmethod
     def refresh_list(cls):
@@ -216,7 +215,7 @@ class Drive:
         for index, link in enumerate(links):
             title = link['title']
             alternateLink = link['alternateLink']
-            icon = link['icon']
+            icon = util.find_icon(link)
             wf.add_item(
                 title=title,
                 arg=alternateLink,
