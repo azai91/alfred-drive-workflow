@@ -6,7 +6,7 @@ CLIENT_SECRET = 'rty2NIATZfWFWSDX-XPs2usX'
 SCOPE = 'https://www.googleapis.com/auth/drive.readonly'
 REDIRECT_URI = 'http://127.0.0.1:1337'
 
-AUTH_URL = 'https://accounts.google.com/o/oauth2/auth?scope=%s&redirect_uri=%s&response_type=code&client_id=%s&access_type=offline&approval_prompt=force' % (SCOPE, REDIRECT_URI, CLIENT_ID)
+AUTH_URL = 'https://accounts.google.com/o/oauth2/auth?scope=%(scope)s&redirect_uri=%(redirect_uri)s&response_type=code&client_id=%(client_id)s&access_type=offline&approval_prompt=force' % {'scope' : SCOPE, 'redirect_uri' : REDIRECT_URI, 'client_id' : CLIENT_ID}
 
 TOKEN_URL = 'https://www.googleapis.com/oauth2/v3/token'
 FILES_URL = 'https://www.googleapis.com/drive/v2/files?fields=items'
