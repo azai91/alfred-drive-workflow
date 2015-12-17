@@ -82,8 +82,14 @@ class Drive:
         # TODO: Log errors to alfred bar
         if 'error' in response and cls.refresh():
             return cls.get_links()
-        else:
-            return response['items']
+
+        items = response['items']
+        while 'nextPageToken' in response:
+            nextPageToken = response['nextPageToken']
+            response = requests.get(FILES_URL + '&pageToken=' + nextPageToken, headers=headers).json()
+            items += response['items']
+
+        return items
 
     @classmethod
     def refresh_list(cls):
