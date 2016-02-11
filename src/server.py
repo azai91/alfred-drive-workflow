@@ -29,6 +29,6 @@ server_address = ('127.0.0.1', 1337)
 
 HandlerClass.protocol_version = Protocol
 httpd = ServerClass(server_address, HandlerClass)
-httpd.timeout = 20
+httpd.timeout = 60
 httpd.handle_request()
 logging.info('Server started on port 1337')
