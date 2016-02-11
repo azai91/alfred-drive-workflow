@@ -70,15 +70,12 @@ class TestDrive(unittest.TestCase):
         self.assertEquals(len(wf._items), 1)
         self.assertEquals(wf._items[0].title, ERRORS['ConnectionError']['title'])
 
-
-
     @httpretty.activate
     def stest_get_links(self):
         wf._items = []
         Drive.clear_cache()
         with self.assertRaises(Exception):
             Drive.get_links()
-
 
     def xtest_show_items_time(self):
         wf._items = []
@@ -87,8 +84,6 @@ class TestDrive(unittest.TestCase):
         self.assertEquals(time.time() * 1000 - start_time, 0)
 
     def setUp(self):
-        # sys.stdout = open(os.devnull, 'w')
-
         CachedData.clear()
         StoredData.clear()
         Passwords.clear()
@@ -145,8 +140,6 @@ class TestDrive(unittest.TestCase):
 
         wf.delete_password = delete_password
 
-        # wf.save_password('venmo_access_token', SAMPLE_ACCESS_TOKEN)
-        # wf.store_data('venmo_user', sample_user)
 
 
 def exceptionCallback(request, uri, headers):
