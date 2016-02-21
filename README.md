@@ -3,6 +3,8 @@ This workflow searched your google drive and opens the files in your browser. Th
 
 With ```enter``` you can open the entry in your default browser.
 
+With ```CMD+C``` you can copy the link to your clipboard.
+
 [Download](https://github.com/azai91/alfred-drive-workflow/releases)
 
 ![inline](./assets/search.gif)
