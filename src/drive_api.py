@@ -158,7 +158,8 @@ class Drive:
             cls.show_set_cache_length(user_input[17:])
 
          # if account is already set
-        if wf.get_password('drive_access_token'):
+        try:
+            wf.get_password('drive_access_token')
             if 'create google doc'.startswith(user_input.lower()):
                 cls.show_create_setting('DOC')
             if 'create google sheet'.startswith(user_input.lower()):
@@ -167,6 +168,7 @@ class Drive:
                 cls.show_create_setting('SLIDE')
             if 'create google form'.startswith(user_input.lower()):
                 cls.show_create_setting('FORM')
+        except: pass
 
         if len(wf._items) == 0:
             cls.show_error('InvalidOption')
