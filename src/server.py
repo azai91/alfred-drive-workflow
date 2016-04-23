@@ -18,7 +18,7 @@ class HandlerClass(BaseHTTPServer.BaseHTTPRequestHandler):
             subprocess.call(['python','./drive_refresh.py'])
             sys.stdout.write('Account Saved')
             logging.info('Account Saved')
-            # s.wfile.write('Your code has been saved in Alfred')
+            s.wfile.write('Your code has been saved in Alfred')
         except:
             s.wfile.write('Error with setting code')
 
