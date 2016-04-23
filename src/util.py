@@ -22,5 +22,9 @@ def find_icon(link):
     elif link['mimeType'] == 'application/vnd.google-apps.presentation':
         icon = './icons/slide.png'
     elif link['mimeType'] == 'application/vnd.google-apps.form':
-        icon = './icons/slide.png'
+        icon = './icons/form.png'
+    elif link['mimeType'] == 'application/pdf':
+        icon = './icons/pdf.png'
+    else:
+        icon = './icons/pdf.png'
     return icon
