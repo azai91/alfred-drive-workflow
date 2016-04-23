@@ -16,9 +16,11 @@ def internet_on():
 
 def find_icon(link):
     if link['mimeType'] == 'application/vnd.google-apps.document':
-        icon = './icons/docs.png'
+        icon = './icons/doc.png'
     elif link['mimeType'] == 'application/vnd.google-apps.spreadsheet':
-        icon = './icons/sheets.png'
+        icon = './icons/sheet.png'
     elif link['mimeType'] == 'application/vnd.google-apps.presentation':
-        icon = './icons/slides.png'
+        icon = './icons/slide.png'
+    elif link['mimeType'] == 'application/vnd.google-apps.form':
+        icon = './icons/slide.png'
     return icon

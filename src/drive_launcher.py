@@ -18,6 +18,14 @@ def main(wf):
     elif url == 'clear':
         Drive.clear_cache()
         return sys.stdout.write('cache cleared')
+    elif url == 'create_doc':
+        url = Drive.create_file('DOC')
+    elif url == 'create_sheet':
+        url = Drive.create_file('SHEET')
+    elif url == 'create_slide':
+        url = Drive.create_file('SLIDE')
+    elif url == 'create_form':
+        url = Drive.create_file('FORM')
     elif url.startswith('set'):
         length = int(url[3:])
         Drive.set_cache_length(length)

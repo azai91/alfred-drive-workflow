@@ -1,10 +1,10 @@
 import json
 import subprocess
-from config import CLIENT_ID, CLIENT_SECRET, SCOPE, REDIRECT_URI, FILES_URL, AUTH_URL, TOKEN_URL, TOKEN_URL, CACHE_MAX_AGE, ERRORS, OPTIONS, SETTINGS
+from config import *
 import requests
 import util
 from time import sleep
-from workflow import Workflow, ICON_EJECT, ICON_ACCOUNT, ICON_BURN, ICON_CLOCK, ICON_WARNING, PasswordNotFound
+from workflow import *
 from workflow.background import is_running, run_in_background
 UPDATE_SETTINGS = {'github_slug' : 'azai91/alfred-drive-workflow'}
 HELP_URL = 'https://github.com/azai91/alfred-drive-workflow/issues'
@@ -28,7 +28,6 @@ class Drive:
 
         Store tokens in workflow
         """
-
 
         response = requests.post(TOKEN_URL, {
             'code': code,
@@ -137,6 +136,7 @@ class Drive:
         for option in OPTIONS:
             wf.add_item(title=option['title'],
                 autocomplete=option['autocomplete'])
+
         wf.send_feedback()
 
     @classmethod
@@ -157,6 +157,17 @@ class Drive:
         if 'set cache length'.startswith(user_input[:16].lower()):
             cls.show_set_cache_length(user_input[17:])
 
+         # if account is already set
+        if wf.get_password('drive_access_token'):
+            if 'create google doc'.startswith(user_input.lower()):
+                cls.show_create_setting('DOC')
+            if 'create google sheet'.startswith(user_input.lower()):
+                cls.show_create_setting('SHEET')
+            if 'create google slide'.startswith(user_input.lower()):
+                cls.show_create_setting('SLIDE')
+            if 'create google form'.startswith(user_input.lower()):
+                cls.show_create_setting('FORM')
+
         if len(wf._items) == 0:
             cls.show_error('InvalidOption')
 
@@ -171,6 +182,17 @@ class Drive:
             icon=SETTINGS[setting]['icon'],
             autocomplete=SETTINGS[setting]['autocomplete'],
             valid=True)
+
+    @classmethod
+    def show_create_setting(cls, setting):
+        """Show settings"""
+
+        wf.add_item(title=CREATE_SETTINGS[setting]['title'],
+            arg=CREATE_SETTINGS[setting]['arg'],
+            icon=CREATE_SETTINGS[setting]['icon'],
+            autocomplete=CREATE_SETTINGS[setting]['autocomplete'],
+            valid=True)
+
 
     @classmethod
     def show_set_cache_length(cls, length):
@@ -227,4 +249,24 @@ class Drive:
                 arg=alternateLink,
                 icon=icon,
                 valid=True)
+
+    @classmethod
+    def create_file(cls, type):
+        """
+        Returns:
+            a list of all spreadsheets and documents from Google Drive
+        """
+
+        access_token = wf.get_password('drive_access_token')
+        headers = {
+            'Authorization' : 'Bearer %s' % access_token,
+            'Content-Type': 'application/json'
+        }
+        response = requests.post(CREATE_URL, headers=headers, data=json.dumps({
+            'mimeType' : MIMETYPES[type]
+            })).json()
+        
+        return response['webViewLink']
+        
+        
 
