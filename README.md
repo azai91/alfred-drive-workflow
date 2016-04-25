@@ -9,6 +9,8 @@ With ```CMD+C``` you can copy the link to your clipboard.
 
 ![inline](./assets/search.gif)
 
+![inline](./assets/create.gif)
+
 ##Getting started
 
 You have to login (```d > login```) before you can use the workflow. The login uses OAuth, so you do not need to enter your credentials.
