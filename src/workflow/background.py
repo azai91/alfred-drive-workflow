@@ -118,7 +118,7 @@ def _background(stdin='/dev/null', stdout='/dev/null',
     try:
         pid = os.fork()
         if pid > 0:
-            sys.exit(0)  # Exit first parent.
+            os._exit(0)  # Exit first parent.
     except OSError as e:
         wf().logger.critical("fork #1 failed: ({0:d}) {1}".format(
                              e.errno, e.strerror))
@@ -131,7 +131,7 @@ def _background(stdin='/dev/null', stdout='/dev/null',
     try:
         pid = os.fork()
         if pid > 0:
-            sys.exit(0)  # Exit second parent.
+            os._exit(0)  # Exit second parent.
     except OSError as e:
         wf().logger.critical("fork #2 failed: ({0:d}) {1}".format(
                              e.errno, e.strerror))
