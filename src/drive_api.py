@@ -242,15 +242,16 @@ class Drive:
 
     @classmethod
     def add_items(cls, links):
-        # sorted(links, key=lambda link : link['lastViewedByMeDate'])
-        for index, link in enumerate(links):
+        for link in sorted(links, key=lambda link : link['title']):
             title = link['title']
             alternateLink = link['alternateLink']
             icon = util.find_icon(link)
+            uid = link['id']
             wf.add_item(
                 title=title,
                 arg=alternateLink,
                 icon=icon,
+                uid=uid,
                 valid=True)
 
     @classmethod
