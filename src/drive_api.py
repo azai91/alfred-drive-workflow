@@ -110,6 +110,7 @@ class Drive:
 
         try:
             links = wf.cached_data('drive_api_results', cls.get_links, cache_length)
+            links = [item for item in links if not item['labels']['trashed']]
         except (requests.ConnectionError, PasswordNotFound), e:
             cls.show_error(type(e).__name__)
             return wf.send_feedback()
@@ -241,15 +242,16 @@ class Drive:
 
     @classmethod
     def add_items(cls, links):
-        # sorted(links, key=lambda link : link['lastViewedByMeDate'])
-        for index, link in enumerate(links):
+        for link in sorted(links, key=lambda link : link['title']):
             title = link['title']
             alternateLink = link['alternateLink']
             icon = util.find_icon(link)
+            uid = link['id']
             wf.add_item(
                 title=title,
                 arg=alternateLink,
                 icon=icon,
+                uid=uid,
                 valid=True)
 
     @classmethod
