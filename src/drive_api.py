@@ -110,6 +110,7 @@ class Drive:
 
         try:
             links = wf.cached_data('drive_api_results', cls.get_links, cache_length)
+            links = [item for item in links if not item['labels']['trashed']]
         except (requests.ConnectionError, PasswordNotFound), e:
             cls.show_error(type(e).__name__)
             return wf.send_feedback()
