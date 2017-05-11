@@ -61,7 +61,7 @@
 				<key>script</key>
 				<string>python drive.py "{query}"</string>
 				<key>title</key>
-				<string>Search Google Drive</string>
+				<string>Search Google Drive for ‘…’</string>
 				<key>type</key>
 				<integer>0</integer>
 				<key>withspace</key>
