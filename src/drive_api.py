@@ -156,7 +156,8 @@ class Drive:
             'title':        SETTINGS['SET_CACHE']['title'] % '[seconds]',
             'autocomplete': SETTINGS['SET_CACHE']['autocomplete'],
             'arg':          SETTINGS['SET_CACHE']['arg'],
-            'icon':         SETTINGS['SET_CACHE']['icon']
+            'icon':         SETTINGS['SET_CACHE']['icon'],
+            'uid':          SETTINGS['SET_CACHE']['uid']
         })
 
          # if account is already set
@@ -177,7 +178,8 @@ class Drive:
                     arg=action['arg'],
                     icon=action['icon'],
                     autocomplete=action['autocomplete'],
-                    valid=True)
+                    valid=True,
+                    uid=action['uid'])
 
         if len(wf._items) == 0:
             cls.show_error('InvalidOption')

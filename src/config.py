@@ -27,25 +27,29 @@ SETTINGS = {
         'title' : 'Login',
         'autocomplete' : '> Login',
         'arg' : 'login',
-        'icon' : ICON_ACCOUNT
+        'icon' : ICON_ACCOUNT,
+        'uid' : '0728125C-F4A9-4DB1-A28B-CD0CE0177FF2'
     },
     'LOGOUT' : {
         'title' : 'Logout',
         'autocomplete' : '> Logout',
         'arg' : 'logout',
-        'icon' : ICON_EJECT
+        'icon' : ICON_EJECT,
+        'uid' : '529E8958-C154-48D3-8F66-650215C38249'
     },
     'CLEAR_CACHE' : {
         'title' : 'Clear cache',
         'autocomplete' : '> Clear cache',
         'arg' : 'clear',
-        'icon' : ICON_SYNC
+        'icon' : ICON_SYNC,
+        'uid' : '83F6318C-5BAB-4CA5-BCC0-E9CA38E36C5F'
     },
     'SET_CACHE' : {
         'title' : 'Set cache length %s',
         'autocomplete' : '> Set cache length ',
         'arg' : 'set%s',
-        'icon' : ICON_CLOCK
+        'icon' : ICON_CLOCK,
+        'uid' : '7C76815E-DEA3-4806-A434-1569CBADF205'
     }
 }
 
@@ -54,25 +58,29 @@ CREATE_SETTINGS = {
         'title' : 'New Document',
         'autocomplete' : '> New Document',
         'arg' : 'create_doc',
-        'icon' : './icons/doc.png'
+        'icon' : './icons/doc.png',
+        'uid' : '6EA9C89F-E56A-4DD5-AF21-870869D441E6'
     },
     'SHEET' : {
         'title' : 'New Spreadsheet',
         'autocomplete' : '> New Spreadsheet',
         'arg' : 'create_sheet',
-        'icon' : './icons/sheet.png'
+        'icon' : './icons/sheet.png',
+        'uid' : 'ACAA585E-C8CE-4D64-AE64-2AD41F6CA9F5'
     },
     'SLIDE' : {
         'title' : 'New Presentation',
         'autocomplete' : '> New Presentation',
         'arg' : 'create_slide',
-        'icon' : './icons/slide.png'
+        'icon' : './icons/slide.png',
+        'uid' : 'EB4B6437-13DB-4E65-9F7D-5BE060E37649'
     },
     'FORM' : {
         'title' : 'New Form',
         'autocomplete' : '> New Form',
         'arg' : 'create_form',
-        'icon' : './icons/form.png'
+        'icon' : './icons/form.png',
+        'uid' : '3D2966E3-0639-411D-8334-E1926B8626CF'
     }
 }
 
