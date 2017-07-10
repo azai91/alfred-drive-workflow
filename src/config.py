@@ -51,26 +51,26 @@ SETTINGS = {
 
 CREATE_SETTINGS = {
     'DOC' : {
-        'title' : 'Create Google Doc',
-        'autocomplete' : '> Create Google Doc',
+        'title' : 'New Document',
+        'autocomplete' : '> New Document',
         'arg' : 'create_doc',
         'icon' : './icons/doc.png'
     },
     'SHEET' : {
-        'title' : 'Create Google Sheet',
-        'autocomplete' : '> Create Google Sheet',
+        'title' : 'New Spreadsheet',
+        'autocomplete' : '> New Spreadsheet',
         'arg' : 'create_sheet',
         'icon' : './icons/sheet.png'
     },
     'SLIDE' : {
-        'title' : 'Create Google Slide',
-        'autocomplete' : '> Create Google Slide',
+        'title' : 'New Presentation',
+        'autocomplete' : '> New Presentation',
         'arg' : 'create_slide',
         'icon' : './icons/slide.png'
     },
     'FORM' : {
-        'title' : 'Create Google Form',
-        'autocomplete' : '> Create Google Form',
+        'title' : 'New Form',
+        'autocomplete' : '> New Form',
         'arg' : 'create_form',
         'icon' : './icons/form.png'
     }

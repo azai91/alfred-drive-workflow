@@ -161,13 +161,13 @@ class Drive:
          # if account is already set
         try:
             wf.get_password('drive_access_token')
-            if 'create google doc'.startswith(user_input.lower()):
+            if 'new document'.startswith(user_input.lower()):
                 cls.show_create_setting('DOC')
-            if 'create google sheet'.startswith(user_input.lower()):
+            if 'new spreadsheet'.startswith(user_input.lower()):
                 cls.show_create_setting('SHEET')
-            if 'create google slide'.startswith(user_input.lower()):
+            if 'new presentation'.startswith(user_input.lower()):
                 cls.show_create_setting('SLIDE')
-            if 'create google form'.startswith(user_input.lower()):
+            if 'new form'.startswith(user_input.lower()):
                 cls.show_create_setting('FORM')
         except: pass
 

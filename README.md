@@ -33,16 +33,16 @@ Responses from Google Drive API are cached to increase the speed. Use this optio
 - ```d > set cache [seconds]```
 Sets the length of the duration for how long responses are held in cache before a fresh request is made. Default is 3600 seconds (1 hour)
 
-- ```d > Create Google Doc```
+- ```d > New Document```
 Create Google Doc and opens in default browser
 
-- ```d > Create Google Sheet```
+- ```d > New Spreadsheet```
 Create Google Sheet and opens in default browser
 
-- ```d > Create Google Slide```
+- ```d > New Presentation```
 Create Google Slide and opens in default browser
 
-- ```d > Create Google Form```
+- ```d > New Form```
 Create Google Form and opens in default browser
 
 ##Supported files types
