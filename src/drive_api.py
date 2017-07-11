@@ -110,7 +110,20 @@ class Drive:
 
         try:
             links = wf.cached_data('drive_api_results', cls.get_links, cache_length)
-            links = [item for item in links if not item['labels']['trashed']]
+            all_parents = dict(zip(map((lambda item: item['id']), links), links))
+            links = [item for item in links if not (item['labels']['trashed'] or item['mimeType'] == 'application/vnd.google-apps.folder')]
+
+            for item in links:
+                path = []
+                parents = item.get('parents', [])
+                while len(parents):
+                    if parents[0]['isRoot'] or not parents[0]['id'] in all_parents:
+                        break
+                    parent = all_parents[parents[0]['id']]
+                    path.insert(0, parent['title'])
+                    parents = parent.get('parents', [])
+                item['x-path'] = '/'.join(path)
+
         except (requests.ConnectionError, PasswordNotFound), e:
             cls.show_error(type(e).__name__)
             return wf.send_feedback()
@@ -228,11 +241,13 @@ class Drive:
     def add_items(cls, links):
         for link in sorted(links, key=lambda link : link['title']):
             title = link['title']
+            path = link.get('x-path', '')
             alternateLink = link['alternateLink']
             icon = util.find_icon(link)
             uid = link['id']
             wf.add_item(
                 title=title,
+                subtitle=path,
                 arg=alternateLink,
                 icon=icon,
                 uid=uid,
