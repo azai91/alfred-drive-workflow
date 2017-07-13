@@ -110,7 +110,20 @@ class Drive:
 
         try:
             links = wf.cached_data('drive_api_results', cls.get_links, cache_length)
-            links = [item for item in links if not item['labels']['trashed']]
+            all_parents = dict(zip(map((lambda item: item['id']), links), links))
+            links = [item for item in links if not (item['labels']['trashed'] or item['mimeType'] == 'application/vnd.google-apps.folder')]
+
+            for item in links:
+                path = []
+                parents = item.get('parents', [])
+                while len(parents):
+                    if parents[0]['isRoot'] or not parents[0]['id'] in all_parents:
+                        break
+                    parent = all_parents[parents[0]['id']]
+                    path.insert(0, parent['title'])
+                    parents = parent.get('parents', [])
+                item['x-path'] = '/'.join(path)
+
         except (requests.ConnectionError, PasswordNotFound), e:
             cls.show_error(type(e).__name__)
             return wf.send_feedback()
@@ -148,28 +161,38 @@ class Drive:
             user_input, a string that contains users setting preference
         """
 
-        if 'login'.startswith(user_input.lower()):
-            cls.show_setting('LOGIN')
-        ## add another condition
-        if 'logout'.startswith(user_input.lower()):
-            cls.show_setting('LOGOUT')
-        if 'clear cache'.startswith(user_input.lower()):
-            cls.show_setting('CLEAR_CACHE')
-        if 'set cache length'.startswith(user_input[:16].lower()):
-            cls.show_set_cache_length(user_input[17:])
+        actions = []
+        for label in [ 'LOGIN', 'LOGOUT', 'CLEAR_CACHE' ]:
+            actions.append(SETTINGS[label])
+
+        actions.append({
+            'title':        SETTINGS['SET_CACHE']['title'] % '[seconds]',
+            'autocomplete': SETTINGS['SET_CACHE']['autocomplete'],
+            'arg':          SETTINGS['SET_CACHE']['arg'],
+            'icon':         SETTINGS['SET_CACHE']['icon'],
+            'uid':          SETTINGS['SET_CACHE']['uid']
+        })
 
          # if account is already set
         try:
             wf.get_password('drive_access_token')
-            if 'create google doc'.startswith(user_input.lower()):
-                cls.show_create_setting('DOC')
-            if 'create google sheet'.startswith(user_input.lower()):
-                cls.show_create_setting('SHEET')
-            if 'create google slide'.startswith(user_input.lower()):
-                cls.show_create_setting('SLIDE')
-            if 'create google form'.startswith(user_input.lower()):
-                cls.show_create_setting('FORM')
+            for label in [ 'DOC', 'SHEET', 'SLIDE', 'FORM' ]:
+                actions.append(CREATE_SETTINGS[label])
         except: pass
+
+        if len(user_input) > 0:
+            actions = wf.filter(query=user_input, items=actions, key=lambda x : x['title'])
+
+        if len(user_input) > 17 and user_input[:17].lower() == 'set cache length ':
+            cls.show_set_cache_length(user_input[17:])
+        else:
+            for action in actions:
+                wf.add_item(title=action['title'],
+                    arg=action['arg'],
+                    icon=action['icon'],
+                    autocomplete=action['autocomplete'],
+                    valid=True,
+                    uid=action['uid'])
 
         if len(wf._items) == 0:
             cls.show_error('InvalidOption')
@@ -177,44 +200,18 @@ class Drive:
         wf.send_feedback()
 
     @classmethod
-    def show_setting(cls, setting):
-        """Show settings"""
-
-        wf.add_item(title=SETTINGS[setting]['title'],
-            arg=SETTINGS[setting]['arg'],
-            icon=SETTINGS[setting]['icon'],
-            autocomplete=SETTINGS[setting]['autocomplete'],
-            valid=True)
-
-    @classmethod
-    def show_create_setting(cls, setting):
-        """Show settings"""
-
-        wf.add_item(title=CREATE_SETTINGS[setting]['title'],
-            arg=CREATE_SETTINGS[setting]['arg'],
-            icon=CREATE_SETTINGS[setting]['icon'],
-            autocomplete=CREATE_SETTINGS[setting]['autocomplete'],
-            valid=True)
-
-
-    @classmethod
     def show_set_cache_length(cls, length):
         """Show set cache length setting"""
 
-        if not len(length):
-            wf.add_item(title=SETTINGS['SET_CACHE']['title'] % '[seconds]',
-                autocomplete=SETTINGS['SET_CACHE']['autocomplete'],
-                icon=SETTINGS['SET_CACHE']['icon'])
-        else:
-            try:
-                int(length)
-                wf.add_item(title=SETTINGS['SET_CACHE']['title'] % util.convert_time(length),
-                    arg=SETTINGS['SET_CACHE']['arg'] % length,
-                    icon=SETTINGS['SET_CACHE']['icon'],
-                    valid=True)
-            except:
-                wf.add_item(title='please insert valid cache length',
-                    icon=ICON_CLOCK)
+        try:
+            int(length)
+            wf.add_item(title=SETTINGS['SET_CACHE']['title'] % util.convert_time(length),
+                arg=SETTINGS['SET_CACHE']['arg'] % length,
+                icon=SETTINGS['SET_CACHE']['icon'],
+                valid=True)
+        except:
+            wf.add_item(title='please insert valid cache length',
+                icon=ICON_CLOCK)
 
     @classmethod
     def show_error(cls, error):
@@ -244,11 +241,13 @@ class Drive:
     def add_items(cls, links):
         for link in sorted(links, key=lambda link : link['title']):
             title = link['title']
+            path = link.get('x-path', '')
             alternateLink = link['alternateLink']
             icon = util.find_icon(link)
             uid = link['id']
             wf.add_item(
                 title=title,
+                subtitle=path,
                 arg=alternateLink,
                 icon=icon,
                 uid=uid,
