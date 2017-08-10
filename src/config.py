@@ -5,12 +5,13 @@ CLIENT_ID = '978117856621-tvpnqtr02b8u0bgnh75sqb1loq1f5527.apps.googleuserconten
 CLIENT_SECRET = 'rty2NIATZfWFWSDX-XPs2usX'
 SCOPE = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file'
 FILTER = urllib.quote("trashed=false and (mimeType='application/vnd.google-apps.document' or mimeType='application/vnd.google-apps.spreadsheet' or mimeType='application/vnd.google-apps.presentation' or mimeType='application/vnd.google-apps.form' or mimeType='application/pdf' or mimeType='application/vnd.google-apps.folder')")
+FIELDS = urllib.quote("items(id,title,alternateLink,mimeType,parents(id,isRoot))")
 REDIRECT_URI = 'http://127.0.0.1:1337'
 
 AUTH_URL = 'https://accounts.google.com/o/oauth2/auth?scope=%(scope)s&redirect_uri=%(redirect_uri)s&response_type=code&client_id=%(client_id)s&access_type=offline&approval_prompt=force' % {'scope' : SCOPE, 'redirect_uri' : REDIRECT_URI, 'client_id' : CLIENT_ID}
 
 TOKEN_URL = 'https://www.googleapis.com/oauth2/v3/token'
-FILES_URL = 'https://www.googleapis.com/drive/v2/files?maxResults=1000&q=%(filter)s&fields=items,nextPageToken' % {'filter' : FILTER}
+FILES_URL = 'https://www.googleapis.com/drive/v2/files?maxResults=1000&q=%(filter)s&fields=%(fields)s,nextPageToken' % {'filter' : FILTER, 'fields' : FIELDS}
 CREATE_URL = 'https://www.googleapis.com/drive/v3/files?fields=webViewLink' 
 
 CACHE_MAX_AGE = 60*60*24*30 # cache set to 1 month
