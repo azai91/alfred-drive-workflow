@@ -4,7 +4,7 @@ from workflow import ICON_ACCOUNT, ICON_EJECT, ICON_WARNING, ICON_SYNC, ICON_CLO
 CLIENT_ID = '978117856621-tvpnqtr02b8u0bgnh75sqb1loq1f5527.apps.googleusercontent.com'
 CLIENT_SECRET = 'rty2NIATZfWFWSDX-XPs2usX'
 SCOPE = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file'
-FILTER = urllib.quote("mimeType='application/vnd.google-apps.document' or mimeType='application/vnd.google-apps.spreadsheet' or mimeType='application/vnd.google-apps.presentation' or mimeType='application/vnd.google-apps.form' or mimeType='application/pdf' or mimeType='application/vnd.google-apps.folder'")
+FILTER = urllib.quote("trashed=false and (mimeType='application/vnd.google-apps.document' or mimeType='application/vnd.google-apps.spreadsheet' or mimeType='application/vnd.google-apps.presentation' or mimeType='application/vnd.google-apps.form' or mimeType='application/pdf' or mimeType='application/vnd.google-apps.folder')")
 REDIRECT_URI = 'http://127.0.0.1:1337'
 
 AUTH_URL = 'https://accounts.google.com/o/oauth2/auth?scope=%(scope)s&redirect_uri=%(redirect_uri)s&response_type=code&client_id=%(client_id)s&access_type=offline&approval_prompt=force' % {'scope' : SCOPE, 'redirect_uri' : REDIRECT_URI, 'client_id' : CLIENT_ID}

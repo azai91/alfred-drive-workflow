@@ -111,7 +111,7 @@ class Drive:
         try:
             links = wf.cached_data('drive_api_results', cls.get_links, cache_length)
             all_parents = dict(zip(map((lambda item: item['id']), links), links))
-            links = [item for item in links if not (item['labels']['trashed'] or item['mimeType'] == 'application/vnd.google-apps.folder')]
+            links = [item for item in links if item['mimeType'] != 'application/vnd.google-apps.folder']
 
             for item in links:
                 path = []
