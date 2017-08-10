@@ -268,6 +268,9 @@ class Drive:
         response = requests.post(CREATE_URL, headers=headers, data=json.dumps({
             'mimeType' : MIMETYPES[type]
             })).json()
+
+        if 'error' in response and cls.refresh():
+            return cls.create_file(type)
         
         return response['webViewLink']
         
