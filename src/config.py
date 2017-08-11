@@ -3,7 +3,7 @@ from workflow import ICON_ACCOUNT, ICON_EJECT, ICON_WARNING, ICON_SYNC, ICON_CLO
 
 CLIENT_ID = '978117856621-tvpnqtr02b8u0bgnh75sqb1loq1f5527.apps.googleusercontent.com'
 CLIENT_SECRET = 'rty2NIATZfWFWSDX-XPs2usX'
-SCOPE = 'https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file'
+SCOPE = 'https://www.googleapis.com/auth/drive'
 FILTER = urllib.quote("trashed=false and (mimeType='application/vnd.google-apps.document' or mimeType='application/vnd.google-apps.spreadsheet' or mimeType='application/vnd.google-apps.presentation' or mimeType='application/vnd.google-apps.form' or mimeType='application/pdf' or mimeType='application/vnd.google-apps.folder')")
 FIELDS = urllib.quote("items(id,title,alternateLink,mimeType,parents(id,isRoot))")
 REDIRECT_URI = 'http://127.0.0.1:1337'
