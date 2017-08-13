@@ -12,15 +12,18 @@ logging.info('Configuring server')
 class HandlerClass(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_GET(s):
         logging.info('GET request received')
+        s.wfile.write('HTTP/1.0 200 OK\n')
+        s.wfile.write('Content-Type: text/plain; charset=UTF-8\n')
+        s.wfile.write('\n')
         try:
             code = urlparse.urlparse(s.path)[4].split('=')[1]
             user_credentials = Drive.exchange_tokens(code)
             subprocess.call(['python','./drive_refresh.py'])
-            sys.stdout.write('Account Saved')
+            sys.stdout.write('Account Saved\n')
             logging.info('Account Saved')
-            s.wfile.write('Your code has been saved in Alfred')
+            s.wfile.write('Your code has been saved in Alfred\n')
         except:
-            s.wfile.write('Error with setting code')
+            s.wfile.write('Error with setting code\n')
 
 ServerClass    = BaseHTTPServer.HTTPServer
 Protocol         = "HTTP/1.0"
