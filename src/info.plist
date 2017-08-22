@@ -17,6 +17,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 		<key>AA12A00A-5FE2-4B3A-A097-7AE9E1753D5E</key>
@@ -28,6 +30,8 @@
 				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
+				<key>vitoclose</key>
+				<false/>
 			</dict>
 		</array>
 	</dict>
@@ -44,8 +48,12 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
 				<key>argumenttype</key>
-				<integer>1</integer>
+				<integer>0</integer>
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
@@ -58,8 +66,16 @@
 				<integer>0</integer>
 				<key>queuemode</key>
 				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string></string>
 				<key>script</key>
-				<string>python drive.py "{query}"</string>
+				<string>./google-drive.rb --filter "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string></string>
 				<key>title</key>
 				<string>Search Google Drive for ‘…’</string>
 				<key>type</key>
@@ -72,7 +88,7 @@
 			<key>uid</key>
 			<string>3C794000-8A32-436F-82A1-5642A20CA50A</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -81,11 +97,7 @@
 				<false/>
 				<key>onlyshowifquerypopulated</key>
 				<true/>
-				<key>output</key>
-				<integer>0</integer>
 				<key>removeextension</key>
-				<false/>
-				<key>sticky</key>
 				<false/>
 				<key>text</key>
 				<string>{query}</string>
@@ -97,7 +109,7 @@
 			<key>uid</key>
 			<string>C1B4C8BA-4178-4D5D-B85A-9DEEECA5959B</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -107,7 +119,14 @@
 				<key>escaping</key>
 				<integer>1</integer>
 				<key>script</key>
-				<string>python drive_launcher.py "{query}"</string>
+				<string>if [[ -z "$action" ]]
+  then open "$1"
+  else ./google-drive.rb "$action" "$1" --name "$name"
+fi</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
 				<key>type</key>
 				<integer>0</integer>
 			</dict>
@@ -116,7 +135,7 @@
 			<key>uid</key>
 			<string>AA12A00A-5FE2-4B3A-A097-7AE9E1753D5E</string>
 			<key>version</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 	</array>
 	<key>readme</key>
@@ -125,16 +144,22 @@
 	<dict>
 		<key>3C794000-8A32-436F-82A1-5642A20CA50A</key>
 		<dict>
+			<key>xpos</key>
+			<integer>300</integer>
 			<key>ypos</key>
 			<real>10</real>
 		</dict>
 		<key>AA12A00A-5FE2-4B3A-A097-7AE9E1753D5E</key>
 		<dict>
+			<key>xpos</key>
+			<integer>500</integer>
 			<key>ypos</key>
 			<real>10</real>
 		</dict>
 		<key>C1B4C8BA-4178-4D5D-B85A-9DEEECA5959B</key>
 		<dict>
+			<key>xpos</key>
+			<integer>700</integer>
 			<key>ypos</key>
 			<real>10</real>
 		</dict>
