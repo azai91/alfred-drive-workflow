@@ -24,7 +24,7 @@ MIME_TYPE_ICONS = {
   'application/vnd.google-apps.spreadsheet'  => { :path => 'icons/sheet.png' },
   'application/vnd.google-apps.presentation' => { :path => 'icons/slide.png' },
   'application/vnd.google-apps.form'         => { :path => 'icons/form.png'  },
-  'application/pdf'                          => { :path => 'icons/pdf.png'   },
+  'application/pdf'                          => { :path => 'icons/dummy.pdf', :type => 'fileicon' },
 }
 
 FileUtils.mkdir_p(CACHE_DIR)
