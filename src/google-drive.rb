@@ -384,6 +384,7 @@ begin
           :subtitle  => parents.reverse.join('/'),
           :icon      => MIME_TYPE_ICONS[item['mimeType']],
           :arg       => item['alternateLink'],
+          :variables => { :action => '--open' },
         }
       end
     end
