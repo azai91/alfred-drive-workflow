@@ -166,7 +166,7 @@ class Auth
   def self.token
     if Keychain.comment('drive_access_token', @service_name) =~ /^Expires: (.*)/
       return Keychain.find('drive_access_token', @service_name) if (Time.parse($1) - Time.now) > 10
-      $log.info("Access token expired #{((Time.now - Time.parse($1))/60).round(2)} minutes ago")
+      $log.info("Access token expired #{duration_in_words(Time.parse($1))}")
     end
 
     if refresh_token = Keychain.find('drive_refresh_token', @service_name)
@@ -286,7 +286,7 @@ class Cache
     if items.nil?
       items = get_items
     else
-      $log.debug("Loaded #{items['items'].size} items from cache (age: #{((Time.now - Time.parse(items['created']))/60).round(2)} minutes)") unless items.nil?
+      $log.debug("Loaded #{items['items'].size} items from cache (created #{duration_in_words(Time.parse(items['created']))})") unless items.nil?
       @needs_update = (Time.now - Time.parse(items['created'])) > @cache_max_age
     end
 
