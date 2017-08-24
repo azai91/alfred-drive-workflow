@@ -206,7 +206,7 @@ class GoogleDrive
 
     query = {
       'q'          => "trashed=false and (mimeType='application/vnd.google-apps.folder' or #{MIME_TYPE_ICONS.keys.map { |type| "mimeType='#{type}'" }.join(' or ')})",
-      'fields'     => 'nextPageToken,items(id,title,alternateLink,mimeType,parents(id,isRoot))',
+      'fields'     => 'nextPageToken,items(id,title,alternateLink,mimeType,parents(id,isRoot),modifiedDate)',
       'maxResults' => 1000,
     }
 
@@ -366,7 +366,7 @@ begin
 
       files = items.reject { |item| item['mimeType'] == 'application/vnd.google-apps.folder' }
       files = files.select { |item| item['title'] =~ filter_regex }
-      files = files.sort { |lhs, rhs| lhs['title'] <=> rhs['title'] }
+      files = files.sort { |lhs, rhs| rhs['modifiedDate'] <=> lhs['modifiedDate'] }
 
       res += files.map do |item|
         parents = []
