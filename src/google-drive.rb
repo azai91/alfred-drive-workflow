@@ -34,6 +34,26 @@ $log.formatter = proc do |severity, datetime, progname, msg|
   "[#{datetime.strftime('%Y-%m-%d %H:%M:%S.%3N')}] [#{Process.pid}] %7s #{msg}\n" % "[#{severity}]"
 end
 
+def duration_in_words(from, to = Time.now)
+  duration = (to - from).round.to_f
+  case duration
+    when               0...2 then 'just now'
+    when              2...60 then '%.0f seconds ago' % duration
+    when             60...90 then 'a minute ago'
+    when           90...3570 then '%.0f minutes ago' % (duration/60)
+    when         3570...5400 then 'an hour ago'
+    when        5400...84600 then '%.0f hours ago' % (duration/(60*60))
+    when      84600...129600 then 'a day ago'
+    when     129600...561600 then '%.0f days ago' % (duration/(24*60*60))
+    when    561600...1036800 then 'a week ago'
+    when   1036800...2419200 then '%.0f weeks ago' % (duration/(7*24*60*60))
+    when   2419200...3952800 then 'a month ago'
+    when  3952800...30304800 then '%.0f months ago' % (duration/(30.5*24*60*60))
+    when 30304800...47304000 then 'a year ago'
+    else                          '%.0f years ago' % (duration/(365*24*60*60))
+  end
+end
+
 class Keychain
   def self.add(password, account, service, comment = nil, label = nil)
     %x{ /usr/bin/security -q add-generic-password -j #{comment.to_s.shellescape} -l #{(label || service).shellescape} -s #{service.shellescape} -a #{account.shellescape} -w #{password.shellescape} -U }
@@ -206,7 +226,7 @@ class GoogleDrive
 
     query = {
       'q'          => "trashed=false and (mimeType='application/vnd.google-apps.folder' or #{MIME_TYPE_ICONS.keys.map { |type| "mimeType='#{type}'" }.join(' or ')})",
-      'fields'     => 'nextPageToken,items(id,title,alternateLink,mimeType,parents(id,isRoot),modifiedDate)',
+      'fields'     => 'nextPageToken,items(id,title,alternateLink,mimeType,parents(id,isRoot),modifiedDate,lastModifyingUserName)',
       'maxResults' => 1000,
     }
 
@@ -378,10 +398,13 @@ begin
           end
         end
 
+        parents  = parents.reverse.join('/')
+        modified = "Modified #{duration_in_words(Time.parse(item['modifiedDate']))} by #{item['lastModifyingUserName'] || 'anonymous'}"
+
         {
           :uid       => item['id'],
           :title     => item['title'],
-          :subtitle  => parents.reverse.join('/'),
+          :subtitle  => [ parents, modified ].reject { |e| e.to_s.empty? }.join(' • '),
           :icon      => MIME_TYPE_ICONS[item['mimeType']],
           :arg       => item['alternateLink'],
           :variables => { :action => '--open' },
