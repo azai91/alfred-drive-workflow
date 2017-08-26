@@ -54,6 +54,38 @@ def duration_in_words(from, to = Time.now)
   end
 end
 
+module SemVer
+  def SemVer.compare(lhs, rhs)
+    less?(lhs, rhs) ? -1 : (less?(rhs, lhs) ? +1 : 0)
+  end
+
+  def SemVer.less?(lhs_str, rhs_str)
+    array_less?(parse(lhs_str), parse(rhs_str), true) do |a, b|
+      array_less?(a.split('.'), b.split('.'), false) do |lhs, rhs|
+        lhs_is_i, rhs_is_i = lhs =~ /^\d+$/, rhs =~ /^\d+$/
+        lhs_is_i && (!rhs_is_i || lhs.to_i < rhs.to_i) || !rhs_is_i && lhs < rhs
+      end
+    end
+  end
+
+  def SemVer.parse(str)
+    if str =~ /\Av?(\d+(?:\.\d+){,2})(?:-(.+?))?(?:\+(.+))?\Z/
+      [ $1, $2 ].reject { |e| e.nil? }
+    else
+      $log.error("Not a valid version string: ‘#{str}’")
+      [ '0' ]
+    end
+  end
+
+  def SemVer.array_less?(lhs, rhs, longer_is_less)
+    for i in 0...([lhs.size, rhs.size].min)
+      return true  if yield lhs[i], rhs[i]
+      return false if yield rhs[i], lhs[i]
+    end
+    longer_is_less ? lhs.size > rhs.size : lhs.size < rhs.size
+  end
+end
+
 class Keychain
   def self.add(password, account, service, comment = nil, label = nil)
     %x{ /usr/bin/security -q add-generic-password -j #{comment.to_s.shellescape} -l #{(label || service).shellescape} -s #{service.shellescape} -a #{account.shellescape} -w #{password.shellescape} -U }
