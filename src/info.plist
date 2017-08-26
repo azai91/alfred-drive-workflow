@@ -33,6 +33,29 @@
 				<key>vitoclose</key>
 				<false/>
 			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>AE6CE12E-AA5F-4B6B-9846-34ED9930F742</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>AE6CE12E-AA5F-4B6B-9846-34ED9930F742</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>D129E0EF-D260-484A-9AC0-8CB0D42944A7</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
 		</array>
 	</dict>
 	<key>createdby</key>
@@ -45,6 +68,32 @@
 	<string>Google Drive</string>
 	<key>objects</key>
 	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>1</integer>
+				<key>script</key>
+				<string>if [[ "$action" == '--open' ]]
+  then open "$1"
+  else ./google-drive.rb "$action" "$1" --name "$name"
+fi</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>AA12A00A-5FE2-4B3A-A097-7AE9E1753D5E</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
@@ -114,15 +163,33 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<true/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>{query}</string>
+				<key>title</key>
+				<string>Workflow Update Available</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>D129E0EF-D260-484A-9AC0-8CB0D42944A7</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>concurrently</key>
 				<false/>
 				<key>escaping</key>
-				<integer>1</integer>
+				<integer>102</integer>
 				<key>script</key>
-				<string>if [[ "$action" == '--open' ]]
-  then open "$1"
-  else ./google-drive.rb "$action" "$1" --name "$name"
-fi</string>
+				<string>./google-drive.rb --check-for-updates</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -133,7 +200,7 @@ fi</string>
 			<key>type</key>
 			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
-			<string>AA12A00A-5FE2-4B3A-A097-7AE9E1753D5E</string>
+			<string>AE6CE12E-AA5F-4B6B-9846-34ED9930F742</string>
 			<key>version</key>
 			<integer>2</integer>
 		</dict>
@@ -156,12 +223,28 @@ fi</string>
 			<key>ypos</key>
 			<real>10</real>
 		</dict>
+		<key>AE6CE12E-AA5F-4B6B-9846-34ED9930F742</key>
+		<dict>
+			<key>note</key>
+			<string>Check for Updates</string>
+			<key>xpos</key>
+			<integer>500</integer>
+			<key>ypos</key>
+			<integer>190</integer>
+		</dict>
 		<key>C1B4C8BA-4178-4D5D-B85A-9DEEECA5959B</key>
 		<dict>
 			<key>xpos</key>
 			<integer>700</integer>
 			<key>ypos</key>
 			<real>10</real>
+		</dict>
+		<key>D129E0EF-D260-484A-9AC0-8CB0D42944A7</key>
+		<dict>
+			<key>xpos</key>
+			<integer>700</integer>
+			<key>ypos</key>
+			<integer>190</integer>
 		</dict>
 	</dict>
 	<key>version</key>
