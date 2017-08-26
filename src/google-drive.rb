@@ -346,8 +346,8 @@ begin
       STDERR << "Failed to create document.\nServer responded with status #{response.code}\n"
     end
   elsif ARGV[0] == '--filter'
-    filter, name = ARGV[1].to_s.strip, 'Untitled'
-    filter, name = *filter.split(/\s+/, 2) if filter =~ /\s\S/
+    filter = ARGV[1].to_s.strip
+    name   = filter =~ /\S+\s(.+)/ ? $1 : nil
 
     res = [
       [ 'Document',     'doc',   '6EA9C89F-E56A-4DD5-AF21-870869D441E6' ],
@@ -357,7 +357,8 @@ begin
     ].map do |arr|
       {
         :title     => "New #{arr[0]}",
-        :subtitle  => "Name: ‘#{name}’",
+        :subtitle  => "Name: ‘#{name || 'Untitled'}’",
+        :match     => "New #{arr[0]} #{name}",
         :icon      => { :path => "icons/#{arr[1]}.png" },
         :variables => { :action => '--create', :name => name },
         :arg       => "application/vnd.google-apps.#{arr[0].downcase}",
@@ -374,10 +375,7 @@ begin
     }
 
     filter_regex = /#{filter.split(//).map { |ch| Regexp.escape(ch) }.join('.*?')}/i
-    res = res.select { |item| item[:title] =~ filter_regex }
-
-    filter = ARGV[1].to_s
-    filter_regex = /#{filter.split(//).map { |ch| Regexp.escape(ch) }.join('.*?')}/i
+    res = res.select { |item| (item[:match] || item[:title]) =~ filter_regex }
 
     if items = Cache.items
       parents_by_id = { }
