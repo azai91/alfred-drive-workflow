@@ -9,11 +9,13 @@ require 'shellwords'
 require 'fileutils'
 require 'logger'
 require 'tempfile'
+require 'open-uri'
 
 CLIENT_ID       = '978117856621-tvpnqtr02b8u0bgnh75sqb1loq1f5527.apps.googleusercontent.com'
 CLIENT_SECRET   = 'rty2NIATZfWFWSDX-XPs2usX'
 REDIRECT_URL    = 'http://127.0.0.1:1337'
 
+RELEASES_URL    = "https://api.github.com/repos/#{ENV['gh_repos'] || 'azai91/alfred-drive-workflow'}/releases"
 BUNDLE_ID       = ENV['alfred_workflow_bundleid'] || 'com.drive.azai91'
 CACHE_DIR       = ENV['alfred_workflow_cache']    || "/tmp/#{BUNDLE_ID}"
 
@@ -327,6 +329,61 @@ class Cache
 
   def self.delete
     File.unlink(@cache_file) rescue nil
+  end
+end
+
+class Releases
+  @cache_file    = "#{CACHE_DIR}/github-releases.json"
+  @cache_max_age = 12*60*60 # 12 hours
+
+  def self.online
+    res = open(RELEASES_URL) { |io| JSON.parse(io.read) }
+    $log.info("Got #{res.size} releases from #{RELEASES_URL}")
+
+    res.each do |release|
+      release['assets'] = release['assets'].select do |asset|
+        asset['name'] =~ /\.alfredworkflow$/ && asset['content_type'] == 'application/octet-stream' && asset['browser_download_url']
+      end
+    end
+
+    res.reject do |release|
+      release['draft'] || release['assets'].empty?
+    end
+  end
+
+  def self.cached
+    releases = open(@cache_file, File::RDONLY) do |io|
+      io.flock(File::LOCK_SH)
+      JSON.parse(io.read)
+    end rescue nil
+    $log.debug("Loaded #{releases['releases'].size} releases from cache (created #{duration_in_words(Time.at(releases['created']))})") unless releases.nil?
+    releases ? releases['releases'] : [ ]
+  end
+
+  def self.refresh_cache
+    open(@cache_file, File::RDWR|File::CREAT) do |io|
+      io.flock(File::LOCK_SH)
+      releases = JSON.parse(io.read) rescue nil
+
+      if releases.nil? || Time.now.to_f - releases['created'] > @cache_max_age
+        releases = {
+          'created'  => Time.now.to_f,
+          'releases' => Releases.online
+        }
+
+        io.flock(File::LOCK_EX)
+        io.seek(0)
+        io.truncate(0)
+        io.write(JSON.generate(releases))
+      end
+    end
+    self
+  end
+
+  def self.latest(include_prereleases = false)
+    releases = Releases.cached
+    releases = releases.reject { |release| release['prerelease'] } unless include_prereleases
+    releases.max { |lhs, rhs| SemVer.compare(lhs['tag_name'], rhs['tag_name']) }
   end
 end
 
