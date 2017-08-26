@@ -22,6 +22,7 @@ WORKFLOW_NAME   = ENV['alfred_workflow_name']     || 'Google Drive'
 VERSION         = ENV['alfred_workflow_version']  || '1.0'
 
 EJECT_ICON_PATH = '/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/EjectMediaIcon.icns'
+SYNC_ICON_PATH  = '/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Sync.icns'
 
 MIME_TYPE_ICONS = {
   'application/vnd.google-apps.document'     => { :path => 'icons/doc.png'   },
@@ -464,6 +465,22 @@ begin
       :arg       => 'revoke',
       :uid       => '87B64A2A-F6CE-461C-9A2F-303719D20EFE',
     }
+
+    if latest = Releases.latest
+      $log.debug("Latest online version is #{latest['tag_name']}, we are running #{VERSION}")
+      if SemVer.less?(VERSION, latest['tag_name'])
+        if asset = latest['assets'].first
+          res << {
+            :title     => "Update to #{WORKFLOW_NAME} version #{latest['tag_name'].sub(/^v?/, '')}",
+            :subtitle  => "You are using version #{VERSION}",
+            :icon      => { :path => SYNC_ICON_PATH },
+            :uid       => '1EBA5153-782F-485A-BC5A-10D2E5712DAC',
+            :arg       => asset['browser_download_url'],
+            :variables => { :action => '--update-to' },
+          }
+        end
+      end
+    end
 
     filter_regex = /#{filter.split(//).map { |ch| Regexp.escape(ch) }.join('.*?')}/i
     res = res.select { |item| (item[:match] || item[:title]) =~ filter_regex }
