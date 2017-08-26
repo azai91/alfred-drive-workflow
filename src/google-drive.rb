@@ -29,7 +29,7 @@ MIME_TYPE_ICONS = {
 
 FileUtils.mkdir_p(CACHE_DIR)
 
-$log = Logger.new(STDERR.tty? ? STDERR : "#{CACHE_DIR}/google-drive.log")
+$log = Logger.new(STDERR.tty? || ENV['alfred_debug'] ? STDERR : "#{CACHE_DIR}/google-drive.log")
 $log.formatter = proc do |severity, datetime, progname, msg|
   "[#{datetime.strftime('%Y-%m-%d %H:%M:%S.%3N')}] [#{Process.pid}] %7s #{msg}\n" % "[#{severity}]"
 end
