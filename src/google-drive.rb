@@ -18,6 +18,8 @@ REDIRECT_URL    = 'http://127.0.0.1:1337'
 RELEASES_URL    = "https://api.github.com/repos/#{ENV['gh_repos'] || 'azai91/alfred-drive-workflow'}/releases"
 BUNDLE_ID       = ENV['alfred_workflow_bundleid'] || 'com.drive.azai91'
 CACHE_DIR       = ENV['alfred_workflow_cache']    || "/tmp/#{BUNDLE_ID}"
+WORKFLOW_NAME   = ENV['alfred_workflow_name']     || 'Google Drive'
+VERSION         = ENV['alfred_workflow_version']  || '1.0'
 
 EJECT_ICON_PATH = '/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/EjectMediaIcon.icns'
 
@@ -502,6 +504,24 @@ begin
     container = { :items => res }
     container[:rerun] = 0.8 if Cache.needs_update
     STDOUT << JSON.generate(container)
+  elsif ARGV[0] == '--check-for-updates'
+    if latest = Releases.refresh_cache.latest
+      $log.debug("Latest online version is #{latest['tag_name']}, we are running #{VERSION}")
+      if SemVer.less?(VERSION, latest['tag_name'])
+        STDOUT << "Enter ‘d update’ to install #{WORKFLOW_NAME} version #{latest['tag_name'].sub(/^v?/, '')}\nYou are using version #{VERSION}\n"
+      end
+    end
+  elsif ARGV[0] == '--update-to'
+    url  = ARGV[1]
+    path = File.join(ENV['TMPDIR'] || '/tmp', File.basename(URI.parse(url).path))
+    $log.info("Downloading #{url} to #{path}")
+    %x{ /usr/bin/curl -Lo #{path.shellescape} #{url.shellescape} }
+    if $?.exitstatus == 0
+      $log.info("Installing update using ‘open’")
+      %x{ /usr/bin/open #{path.shellescape} }
+    else
+      $log.error("Exit code #$? from /usr/bin/curl")
+    end
   else
     $log.error("Unknown argument")
   end
