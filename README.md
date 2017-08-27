@@ -1,51 +1,45 @@
 # Google Drive Workflow for [Alfred](http://www.alfredapp.com/)
-This workflow searched your google drive and opens the files in your browser. They keyword is "d" (example ```d alfred```).
 
-With ```enter``` you can open the entry in your default browser.
+This workflow searches your Google Drive and will open selected files in your browser. The keyword is `d` (example `d alfred`).
 
-With ```CMD+C``` you can copy the link to your clipboard.
+With <kbd>↩</kbd> you can open the entry in your default browser.
+
+With <kbd>⌘C</kbd> you can copy the link to your clipboard.
+
+**Please leave issues if you encounter any problems or star this repo if you found it useful :)**
 
 [Download](http://www.packal.org/workflow/alfred-drive-workflow)
 
-![inline](./assets/search.gif)
+## Getting Started
 
-![inline](./assets/create.gif)
+The first time you use this workflow, you will be asked (in your default browser) to allow “Alfred Drive Workflow” to view and manage files in your Google Drive.
 
-## Getting started
-
-You have to login (```d > login```) before you can use the workflow. The login uses OAuth, so you do not need to enter your credentials.
-
-![inline](./assets/login.gif)
+After successfully connecting the workflow to your Google Drive you can search it from Alfred using `d {query}`.
 
 ## Commands
-- ```d {query}```
-Searches your Google Drive for files that match that query. You can open the file in your default browser by selecting the file and hitting ```enter```
 
-- ```d > login```
-Links the workflow with your Google Drive Account. This option will redirect you to a Google Authentication page.
+- `d {query}`
+Search your Google Drive for files that match the query. You can open the file in your default browser by selecting the file and hitting `enter`
 
-- ```d > logout```
-Removes the current Google Drive Account from the workflow.
+- `d New Document {name}`
+Create a new Google Document and open it in your default browser. Name is optional and defaults to `Untitled`.
 
-- ```d > clear cache```
-Responses from Google Drive API are cached to increase the speed. Use this option if you want to clear the cache and make a fresh request.
+- `d New Spreadsheet {name}`
+Create a Google Spreadsheet and opens it in your default browser. Name is optional and defaults to `Untitled`.
 
-- ```d > set cache [seconds]```
-Sets the length of the duration for how long responses are held in cache before a fresh request is made. Default is 3600 seconds (1 hour)
+- `d New Presentation {name}`
+Create a Google Presentation (slide) and opens it in your default browser. Name is optional and defaults to `Untitled`.
 
-- ```d > New Document```
-Create Google Doc and opens in default browser
+- `d New Form {name}`
+Create a Google Form and opens it in your default browser. Name is optional and defaults to `Untitled`.
 
-- ```d > New Spreadsheet```
-Create Google Sheet and opens in default browser
+- `d Update to Google Drive version 1.x`
+This action is only available when there is an update. It will download the update and ask Alfred to install it.
 
-- ```d > New Presentation```
-Create Google Slide and opens in default browser
+- `d Sign out of Google Drive`
+Disconnect the workflow from Google Drive and delete access tokens.
 
-- ```d > New Form```
-Create Google Form and opens in default browser
-
-## Supported files types
+## Supported Files Types
 
 - Google Docs
 - Google Sheets
@@ -53,20 +47,18 @@ Create Google Form and opens in default browser
 - Google Forms
 - PDFs
 
-## To Develop
+## Developers
 
-- Download repo with submodule
-```
-git clone --recursive https://github.com/azai91/alfred-drive-workflow
-```
+1. Download this repository:
 
-- Download submodule
-```
-git submodule update --init --recursive
-```
+		git clone --recursive https://github.com/azai91/alfred-drive-workflow
 
-Create Blank Workflow
+2. Create a blank workflow
 
-Link `src` repo with workflow repo (find workflow repo by right clicking Google Drive workflow in Alfred Workflow and clicking `Open in Terminal/Finder`)
+3. Create a symbolic link making the new blank workflow point to the `src` folder of this repository (find the blank workflow by right clicking it in Alfred and select `Open in Terminal/Finder`)
 
-### Please leave issues if you encounter any problems or star this repo if you found it useful :)
+## Demo
+
+![Search Google Drive from Alfred using the Google Drive workflow](./assets/search.gif)
+
+![Create a document from Alfred using the Google Drive workflow](./assets/create.gif)
