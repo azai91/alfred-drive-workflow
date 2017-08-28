@@ -8,7 +8,7 @@ With <kbd>⌘C</kbd> you can copy the link to your clipboard.
 
 **Please leave issues if you encounter any problems or star this repo if you found it useful :)**
 
-[Download](http://www.packal.org/workflow/alfred-drive-workflow)
+[Download](https://github.com/azai91/alfred-drive-workflow/releases/latest)
 
 ## Getting Started
 
