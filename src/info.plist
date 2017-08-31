@@ -116,7 +116,7 @@ fi</string>
 				<key>queuemode</key>
 				<integer>1</integer>
 				<key>runningsubtext</key>
-				<string></string>
+				<string>Fetching items from Google Drive…</string>
 				<key>script</key>
 				<string>./google-drive.rb --filter "$1"</string>
 				<key>scriptargtype</key>
