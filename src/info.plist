@@ -77,7 +77,7 @@
 				<integer>1</integer>
 				<key>script</key>
 				<string>if [[ "$action" == '--open' ]]
-  then open "$1"
+  then /usr/bin/open "$1"
   else ./google-drive.rb "$action" "$1" --name "$name"
 fi</string>
 				<key>scriptargtype</key>
