@@ -39,6 +39,16 @@ This action is only available when there is an update. It will download the upda
 - `d Sign out of Google Drive`
 Disconnect the workflow from Google Drive and delete access tokens.
 
+## Configuration
+
+If you want to open links in a specific browser you can create a [Workflow Environment Variable][1] named `open_args` with a value of:
+
+- Safari:  `-b com.apple.Safari`
+- Firefix: `-b org.mozilla.firefox`
+- Chrome:  `-b com.google.Chrome`
+
+[1]: https://www.alfredapp.com/help/workflows/advanced/variables/
+
 ## Supported Files Types
 
 - Google Docs

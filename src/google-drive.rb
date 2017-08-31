@@ -227,7 +227,7 @@ class Auth
       'access_type'     => 'offline',
       'approval_prompt' => 'force'
     })
-    %x{ /usr/bin/open #{auth_url.shellescape} }
+    %x{ /usr/bin/open ${open_args} #{auth_url.shellescape} }
 
     thread.join
 
@@ -427,7 +427,7 @@ begin
     if response.code.to_i == 200
       body = JSON.parse(response.body)
       if body.has_key?('webViewLink')
-        %x{ /usr/bin/open #{body['webViewLink'].shellescape} }
+        %x{ /usr/bin/open ${open_args} #{body['webViewLink'].shellescape} }
         Cache.needs_update = true
       else
         $log.error("No webViewLink in response: #{response.body}")

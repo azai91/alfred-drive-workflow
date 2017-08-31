@@ -77,7 +77,7 @@
 				<integer>1</integer>
 				<key>script</key>
 				<string>if [[ "$action" == '--open' ]]
-  then /usr/bin/open "$1"
+  then /usr/bin/open ${open_args} "$1"
   else ./google-drive.rb "$action" "$1" --name "$name"
 fi</string>
 				<key>scriptargtype</key>
@@ -210,7 +210,15 @@ fi</string>
 
 After successfully connecting the workflow to your Google Drive you can search it from Alfred using `d {query}`.
 
-You can also create new documents using `d New Document` or `d New Spreadsheet` optionally followed by the name to use for the new document.</string>
+You can also create new documents using `d New Document` or `d New Spreadsheet` optionally followed by the name to use for the new document.
+
+If you want to open links in a specific browser you can create a [Workflow Environment Variable][1] named `open_args` with a value of:
+
+- Safari:  `-b com.apple.Safari`
+- Firefix: `-b org.mozilla.firefox`
+- Chrome:  `-b com.google.Chrome`
+
+[1]: https://www.alfredapp.com/help/workflows/advanced/variables/</string>
 	<key>uidata</key>
 	<dict>
 		<key>3C794000-8A32-436F-82A1-5642A20CA50A</key>
