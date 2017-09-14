@@ -212,6 +212,21 @@ After successfully connecting the workflow to your Google Drive you can search i
 
 You can also create new documents using `d New Document` or `d New Spreadsheet` optionally followed by the name to use for the new document.
 
+# Configuration
+
+You can set [Workflow Environment Variable][1] to control some aspects of this workflow.
+
+## `custom_query`
+
+This will be `and`’ed with the query used for getting files from Google Drive. See [Searching Files](https://developers.google.com/drive/v2/web/search-parameters) for syntax, some examples:
+
+- Exclude all folders and PDF files from search results: `mimeType != 'application/pdf' and mimeType != 'application/vnd.google-apps.folder'`
+- Limit search results to items in the folder with ID `0Bx_0bq…F2N`: `'0Bx_0bq…F2N' in parents`
+
+To find the ID of a specific folder, navigate to that folder in your web browser and should be able to see the ID in the URL.
+
+## `open_args`
+
 If you want to open links in a specific browser you can create a [Workflow Environment Variable][1] named `open_args` with a value of:
 
 - Safari:  `-b com.apple.Safari`
