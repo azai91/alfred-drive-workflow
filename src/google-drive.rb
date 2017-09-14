@@ -266,7 +266,7 @@ class GoogleDrive
   def self.get_items(token)
     uri = URI.parse('https://www.googleapis.com/drive/v2/files')
 
-    query = {
+    parms = {
       'q'          => "trashed=false and (mimeType='application/vnd.google-apps.folder' or #{MIME_TYPE_ICONS.keys.map { |type| "mimeType='#{type}'" }.join(' or ')})",
       'fields'     => 'nextPageToken,items(id,title,alternateLink,mimeType,parents(id,isRoot),modifiedDate,lastModifyingUserName)',
       'maxResults' => 1000,
@@ -278,7 +278,7 @@ class GoogleDrive
     items = []
 
     loop do
-      uri.query = URI.encode_www_form(query)
+      uri.query = URI.encode_www_form(parms)
       request = Net::HTTP::Get.new(uri.request_uri)
       request.add_field('authorization', "Bearer #{token}")
       response = http.request(request)
@@ -288,7 +288,7 @@ class GoogleDrive
         $log.info("Got #{body['items'].size} items from Google Drive")
         items += body['items']
 
-        next if query['pageToken'] = body['nextPageToken']
+        next if parms['pageToken'] = body['nextPageToken']
       else
         $log.error("Server returned #{response.code} when fetching items from Google Drive: #{JSON.parse(response.body)['error_description']}")
       end
