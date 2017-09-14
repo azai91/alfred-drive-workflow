@@ -549,6 +549,7 @@ begin
   end
 rescue Exception => e
   $log.fatal("Uncaught exception: #{e}")
+  e.backtrace.each { |line| $log.fatal(line) }
 end
 
 $log.debug("Execution took #{(Time.now - start).round(3)} seconds")
@@ -568,5 +569,6 @@ if Cache.needs_update
     end
   rescue Exception => e
     $log.fatal("Uncaught exception: #{e}")
+    e.backtrace.each { |line| $log.fatal(line) }
   end
 end
