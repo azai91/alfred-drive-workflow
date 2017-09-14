@@ -215,8 +215,13 @@ class Auth
     end
 
     uri = URI.parse(REDIRECT_URL)
-    server = Auth.new(uri.host, uri.port)
-    thread = Thread.new { server.accept_token }
+    thread = nil
+    begin
+      server = Auth.new(uri.host, uri.port)
+      thread = Thread.new { server.accept_token }
+    rescue Errno::EADDRINUSE => e
+      $log.error("Already waiting for authentication: #{e}")
+    end
 
     $log.info('Requesting user authentication via browser')
     auth_url = 'https://accounts.google.com/o/oauth2/auth?' + URI.encode_www_form({
@@ -229,7 +234,7 @@ class Auth
     })
     %x{ /usr/bin/open ${open_args} #{auth_url.shellescape} }
 
-    thread.join
+    thread.join unless thread.nil?
 
     if token = Keychain.find('drive_access_token', @service_name)
       return token
