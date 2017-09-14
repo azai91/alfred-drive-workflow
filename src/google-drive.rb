@@ -266,8 +266,14 @@ class GoogleDrive
   def self.get_items(token)
     uri = URI.parse('https://www.googleapis.com/drive/v2/files')
 
+    mime_types = MIME_TYPE_ICONS.keys << 'application/vnd.google-apps.folder'
+    query = "trashed=false and (#{mime_types.map { |type| "mimeType='#{type}'" }.join(' or ')})"
+    if custom = ENV['custom_query']
+      query = "(#{query}) and (#{custom})"
+    end
+
     parms = {
-      'q'          => "trashed=false and (mimeType='application/vnd.google-apps.folder' or #{MIME_TYPE_ICONS.keys.map { |type| "mimeType='#{type}'" }.join(' or ')})",
+      'q'          => query,
       'fields'     => 'nextPageToken,items(id,title,alternateLink,mimeType,parents(id,isRoot),modifiedDate,lastModifyingUserName)',
       'maxResults' => 1000,
     }
