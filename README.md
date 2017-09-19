@@ -10,6 +10,10 @@ With <kbd>⌘C</kbd> you can copy the link to your clipboard.
 
 [Download](https://github.com/azai91/alfred-drive-workflow/releases/latest)
 
+## Requirements
+
+This workflow relies on features introduced in Alfred version 3.4.1.
+
 ## Getting Started
 
 The first time you use this workflow, you will be asked (in your default browser) to allow “Alfred Drive Workflow” to view and manage files in your Google Drive.
