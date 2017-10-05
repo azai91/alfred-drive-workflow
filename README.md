@@ -6,7 +6,7 @@ With <kbd>↩</kbd> you can open the entry in your default browser.
 
 With <kbd>⌘C</kbd> you can copy the link to your clipboard.
 
-**Please leave issues if you encounter any problems or star this repo if you found it useful :)**
+**Please see [troubleshooting](#troubleshooting) if you encounter any problems and star this repo if you find it useful :)**
 
 [Download](https://github.com/azai91/alfred-drive-workflow/releases/latest)
 
@@ -65,6 +65,30 @@ If you want to open links in a specific browser you can create a [Workflow Envir
 - Chrome:  `-b com.google.Chrome`
 
 [1]: https://www.alfredapp.com/help/workflows/advanced/variables/
+
+## Troubleshooting
+
+If you see wrong behavior you are welcome to open an issue but please include the log file!
+
+The log file can be found as `~/Library/Caches/com.runningwithcrayons.Alfred-3/Workflow Data/com.drive.azai91/google-drive.log`.
+
+When pasting it into an issue, be sure to either indent each line with a tab character / four spaces or surround it with three back-ticks like this:
+
+	```
+	# Logfile created on 2017-10-05 08:51:37 +0200 by logger.rb/41954
+	[2017-10-05 08:51:37.001] [42968] [DEBUG] ./google-drive.rb ["--filter", "f"]
+	[2017-10-05 08:51:37.053] [42968]  [INFO] Requesting user authentication via browser
+	[2017-10-05 08:51:37.053] [42968] [DEBUG] Starting HTTP server
+	[2017-10-05 08:51:43.444] [42968] [DEBUG] Received HTTP request: GET /?code=4/Nd2rioLCh20PgBHML6vBUYacMCddkRpl0s2U4HR2GrW HTTP/1.1
+	[2017-10-05 08:51:43.709] [42968]  [INFO] Refresh token added to keychain
+	[2017-10-05 08:51:43.765] [42968]  [INFO] Access token added to keychain, expires in 3600 seconds
+	[2017-10-05 08:51:43.765] [42968] [DEBUG] Stopping HTTP server
+	[2017-10-05 08:51:44.804] [42968]  [INFO] Got 155 items from Google Drive
+	[2017-10-05 08:51:44.815] [42968] [DEBUG] Execution took 7.814 seconds
+	[2017-10-05 08:51:44.985] [42983] [DEBUG] ./google-drive.rb ["--filter", "foo"]
+	[2017-10-05 08:51:44.988] [42983] [DEBUG] Loaded 155 items from cache (created 8 seconds ago)
+	[2017-10-05 08:51:44.989] [42983] [DEBUG] Execution took 0.003 seconds
+	```
 
 ## Supported Files Types
 
