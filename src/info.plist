@@ -230,9 +230,10 @@ To find the ID of a specific folder, navigate to that folder in your web browser
 If you want to open links in a specific browser you can create a [Workflow Environment Variable][1] named `open_args` with a value of:
 
 - Safari:  `-b com.apple.Safari`
-- Firefix: `-b org.mozilla.firefox`
+- Firefox: `-b org.mozilla.firefox`
 - Chrome:  `-b com.google.Chrome`
-
+- Firefox developer edition '-b org.mozilla.firefoxdeveloperedition'
+		
 [1]: https://www.alfredapp.com/help/workflows/advanced/variables/</string>
 	<key>uidata</key>
 	<dict>
