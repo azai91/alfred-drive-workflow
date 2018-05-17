@@ -233,7 +233,7 @@ If you want to open links in a specific browser you can create a [Workflow Envir
 - Firefox: `-b org.mozilla.firefox`
 - Chrome:  `-b com.google.Chrome`
 - Firefox developer edition '-b org.mozilla.firefoxdeveloperedition'
-		
+
 [1]: https://www.alfredapp.com/help/workflows/advanced/variables/</string>
 	<key>uidata</key>
 	<dict>
@@ -276,7 +276,7 @@ If you want to open links in a specific browser you can create a [Workflow Envir
 		</dict>
 	</dict>
 	<key>version</key>
-	<string>2.1</string>
+	<string>2.2</string>
 	<key>webaddress</key>
 	<string>https://github.com/azai91</string>
 </dict>
